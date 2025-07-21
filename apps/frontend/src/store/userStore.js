@@ -3,24 +3,25 @@ import { jwtDecode } from 'jwt-decode';
 
 export const useUserStore = create((set) => ({
   user: null,
-  token: null,
+  isLoaded: false,
 
-  login: (token) => {
-    const decoded = jwtDecode(token);
-    set({ token, user: decoded });
-    localStorage.setItem('sims_token', token);
-  },
+  setUser: (user) => set({ user, isLoaded: true }),
 
   logout: () => {
-    set({ user: null, token: null });
-    localStorage.removeItem('sims_token');
+    localStorage.removeItem('token');
+    set({ user: null, isLoaded: true });
   },
 
   restoreSession: () => {
-    const token = localStorage.getItem('sims_token');
-    if (token) {
+    const token = localStorage.getItem('token');
+    if (!token) return set({ user: null, isLoaded: true });
+
+    try {
       const decoded = jwtDecode(token);
-      set({ token, user: decoded });
+      set({ user: { username: decoded.username, role: decoded.role }, isLoaded: true });
+    } catch (err) {
+      console.error('Invalid token');
+      set({ user: null, isLoaded: true });
     }
-  }
+  },
 }));
