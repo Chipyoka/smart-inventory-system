@@ -14,7 +14,10 @@ export const useUserStore = create((set) => ({
 
   restoreSession: () => {
     const token = localStorage.getItem('token');
-    if (!token) return set({ user: null, isLoaded: true });
+    if (!token) {
+      set({ user: null, isLoaded: true });
+      return;
+    }
 
     try {
       const decoded = jwtDecode(token);

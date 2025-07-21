@@ -4,7 +4,7 @@ import App from './App';
 import './index.css';
 import { useUserStore } from './store/userStore';
 
-// restore session before render
+
 useUserStore.getState().restoreSession();
 
 ReactDOM.createRoot(document.getElementById('root')).render(

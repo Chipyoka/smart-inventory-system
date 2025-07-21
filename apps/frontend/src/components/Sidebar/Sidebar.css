@@ -1,0 +1,104 @@
+.sidebar {
+    width: 250px;
+    background-color: #ffffff;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Make inner container take full height */
+.sidebar-inner {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    padding: 1.5rem 1rem;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex-grow: 1;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 15px;
+    font-weight: 500;
+    color: #334155;
+    text-decoration: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-link:hover {
+    background-color: #e2e8f0;
+    color: #1e293b;
+}
+
+.sidebar-link.active {
+    background-color: #3412DA;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.sidebar-icon {
+    font-size: 18px;
+    color: inherit;
+    flex-shrink: 0;
+}
+
+/* Footer sticks at the bottom */
+.sidebar-footer {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 1rem;
+}
+
+/* Reduced width logout button */
+.sidebar-logout-button {
+    all: unset;
+    max-width: 160px;
+    /* Reduced width */
+    margin: 0 auto;
+    /* Center horizontally */
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 13px;
+    font-weight: 500;
+    color: #334155;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-logout-button:hover {
+    background-color: #f87171;
+    color: white;
+}
+
+.sidebar-logout-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 18, 218, 0.3);
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%;
+        box-shadow: none;
+    }
+
+    .sidebar-inner {
+        height: auto;
+    }
+}

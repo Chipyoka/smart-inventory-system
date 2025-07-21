@@ -31,7 +31,7 @@
 .login-left {
     flex: 1;
     position: relative;
-    background: url('../../../public/image.png') no-repeat center center;
+    background: url('../../../image.png') no-repeat center center;
     background-size: cover;
     color: white;
     padding: 80px 60px;
