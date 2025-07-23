@@ -1,26 +1,16 @@
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
-const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-require('dotenv').config();
-const db = require('../config/db');
+const jwt = require("jsonwebtoken");
 
-const opts = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET,
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) return res.status(401).json({ message: "No token provided" });
+
+  const token = authHeader.split(" ")[1]; // "Bearer TOKEN"
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: "Invalid token" });
+    req.user = user;
+    next();
+  });
 };
 
-passport.use(
-  new JwtStrategy(opts, async (jwt_payload, done) => {
-    try {
-      const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [jwt_payload.id]);
-      if (rows.length > 0) return done(null, rows[0]);
-      return done(null, false);
-    } catch (err) {
-      return done(err, false);
-    }
-  })
-);
-
-module.exports = passport;
-// This middleware uses Passport.js to authenticate JWT tokens.
-// It extracts the token from the Authorization header and verifies it using the secret key.
+module.exports = authenticateToken;

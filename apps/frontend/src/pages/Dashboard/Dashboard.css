@@ -1,0 +1,25 @@
+.dashboard-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dashboard-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    width: auto;
+}
+
+.summary-wrapper {
+    flex: 3;
+}
+
+.barcode-wrapper {
+    flex: 1;
+}
+
+.barcode-wrapper>* {
+    height: 100%;
+}

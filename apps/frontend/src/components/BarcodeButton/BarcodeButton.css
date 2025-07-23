@@ -1,0 +1,36 @@
+.barcode-button-container {
+    position: relative;
+}
+
+.barcode-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 24px;
+    background: #3412DA;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    width: 180px;
+    height: 140px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 4px 8px rgba(52, 18, 218, 0.4);
+    transition: background-color 0.3s ease;
+}
+
+.barcode-btn:hover {
+    background: #2a0fc2;
+}
+
+.barcode-label {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.barcode-icon {
+    font-size: 48px;
+}

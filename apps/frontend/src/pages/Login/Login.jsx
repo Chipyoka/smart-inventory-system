@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import './Login.css';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
 import logo from '../../assets/logo.png';
 import { useUserStore } from '../../store/userStore';
 
 const Login = () => {
-  const [formData, setFormData] = useState({ username: '', password: '', role: '' });
+  const [formData, setFormData] = useState({ email: '', password: '', role: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -27,10 +26,8 @@ const Login = () => {
       const { data } = await axios.post('http://localhost:5000/api/auth/login', formData);
       localStorage.setItem('token', data.token);
 
-      const decoded = jwtDecode(data.token);
-      const { username, role } = decoded;
-
-      setUser({ username, role });
+      const { name, role } = data.user;
+      setUser({ username: name, role });
 
       if (role === 'admin' || role === 'manager') {
         navigate('/dashboard');
@@ -69,13 +66,13 @@ const Login = () => {
 
           <form onSubmit={handleSubmit}>
             <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
               onChange={handleChange}
               required
-              aria-label="Username"
+              aria-label="Email"
             />
 
             <input

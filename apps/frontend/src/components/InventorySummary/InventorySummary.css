@@ -1,0 +1,65 @@
+.inventory-summary-container {
+    padding: 16px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 16px;
+}
+
+.inventory-summary-container h2 {
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 16px;
+    color: #000;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.summary-card {
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #f9f9f9;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+}
+
+.summary-card strong {
+    display: block;
+    font-size: 22px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 2px;
+}
+
+.summary-card span {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    color: #888;
+}
+
+/* Colored number styles */
+.summary-card.total strong {
+    color: black;
+}
+
+.summary-card.stocked strong {
+    color: green;
+}
+
+.summary-card.expired strong {
+    color: orange;
+}
+
+.summary-card.outofstock strong {
+    color: red;
+}
