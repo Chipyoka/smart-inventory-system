@@ -1,40 +1,118 @@
-.scan-action-panel {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    width: 320px;
-    background: white;
-    padding: 16px;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.scan-action-panel h2 {
-    margin: 0 0 8px;
-    font-size: 18px;
-}
-
-.scan-action-panel p {
-    margin: 0 0 12px;
-    color: #555;
-}
-
-.scan-action-panel .actions {
+/* Fullscreen blur backdrop */
+.scan-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(6px);
+    background-color: rgba(0, 0, 0, 0.4);
     display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
 }
 
-.scan-action-panel button {
-    flex: 1;
-    padding: 8px;
+/* Centered container */
+.scan-action-panel {
+    position: relative;
+    background: white;
+    width: 720px;
+    height: auto;
+    padding: 32px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* Top right close icon */
+.top-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
     border: none;
-    border-radius: 4px;
-    background: #1976d2;
-    color: white;
+    font-size: 20px;
     cursor: pointer;
+    color: #333;
 }
 
-.scan-action-panel button.close {
-    background: #aaa;
+/* Heading centered */
+.scan-heading {
+    font-size: 24px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+/* Label text centered */
+.scan-description {
+    font-size: 16px;
+    margin-bottom: 24px;
+    color: #444;
+    text-align: center;
+}
+
+/* Buttons row */
+.actions {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+    justify-content: center;
+}
+
+/* Base button style */
+.actions button {
+    flex: 0 0 280px;
+    padding: 24px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    /* vertical layout */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    line-height: 1.4;
+}
+
+/* Icon styling */
+.actions .icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+/* Leave Button */
+.actions .leave {
+    background-color: #fdecea;
+    color: #c62828;
+}
+
+.actions .leave .icon {
+    color: #c62828;
+}
+
+.actions .leave:hover {
+    background-color: #f9d6d3;
+}
+
+/* Enter Button */
+.actions .enter {
+    background-color: #e8eaf6;
+    color: #283593;
+}
+
+.actions .enter .icon {
+    color: #283593;
+}
+
+.actions .enter:hover {
+    background-color: #dedeff;
 }

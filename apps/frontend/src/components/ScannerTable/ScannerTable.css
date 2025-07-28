@@ -1,65 +1,143 @@
-.scanner-table-panel {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    width: 480px;
-    background: white;
-    padding: 16px;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.scanner-ui-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    width: 100%;
 }
 
-.back-btn {
-    background: none;
-    border: none;
-    color: #1976d2;
-    cursor: pointer;
-    margin-bottom: 8px;
+.scanner-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    width: 100%;
+    max-width: 900px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
-.scanner-table-panel h2 {
+.scanner-header {
+    text-align: center;
+}
+
+.scanner-header h2 {
     margin: 0;
+    font-size: 22px;
 }
 
-.scanner-table-panel p {
-    margin: 4px 0 12px;
-    color: #555;
+.scanner-header p {
+    color: #666;
+    font-size: 14px;
+    margin-top: 4px;
 }
 
-.scanner-table-panel table {
+.scanner-body {
+    display: flex;
+    gap: 32px;
+    margin-top: 24px;
+}
+
+.product-list {
+    flex: 2;
+}
+
+.sub-label {
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 10px;
+}
+
+.product-list table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 12px;
 }
 
-.scanner-table-panel th,
-td {
-    border: 1px solid #ddd;
-    padding: 6px;
-    text-align: left;
+.product-list td {
+    padding: 8px 4px;
+    font-size: 14px;
 }
 
-.scanner-table-panel th {
-    background: #f5f5f5;
-}
-
-.scanner-table-panel button {
-    padding: 6px 12px;
-    border: none;
+.badge {
+    background: #fff3cd;
+    color: #ff9900;
+    padding: 4px 8px;
+    font-weight: bold;
     border-radius: 4px;
+    font-size: 13px;
+}
+
+.remove-btn {
+    color: #d32f2f;
+    background: transparent;
+    border: none;
+    font-size: 14px;
     cursor: pointer;
 }
 
-.scanner-table-panel button.save-btn {
-    background: #d32f2f;
-    color: white;
+.remove-btn:hover {
+    text-decoration: underline;
 }
 
-.scanner-table-panel button.save-btn:hover {
-    background: #b71c1c;
+.scanner-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.scanner-table-panel button.remove-btn {
-    background: #aaa;
+.scanner-preview {
+    width: 100%;
+    height: 140px;
+    background: #ddd;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.scan-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #f4f0ff;
+    color: #3412da;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.scan-btn:hover {
+    background: #e4dbff;
+}
+
+.status-tag {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #2e7d32;
+    background: #e8f5e9;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.scanner-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.save-btn {
+    padding: 14px 48px;
+    background-color: #3412da;
     color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background-color: #2b0bc4;
 }
