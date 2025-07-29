@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
-const authenticateToken = require('../middleware/auth');
+const inventoryController = require('../controllers/inventoryController');
+const { verifyToken } = require('../middleware/authMiddleware'); 
+const checkRole = require('../middleware/roleMiddleware'); 
 
-// GET /api/inventory/summary
-router.get('/summary', authenticateToken, async (req, res) => {
+//Inventory Summary - Secured Route
+router.get('/summary', verifyToken, async (req, res) => {
   try {
     const [[totalItems]] = await db.query(`SELECT COUNT(*) AS totalItems FROM items`);
     const [[newlyStocked]] = await db.query(`
@@ -32,8 +34,8 @@ router.get('/summary', authenticateToken, async (req, res) => {
   }
 });
 
-// GET /api/inventory/scan/:barcode
-router.get('/scan/:barcode', authenticateToken, async (req, res) => {
+//Barcode Scan - Secured Route
+router.get('/scan/:barcode', verifyToken, async (req, res) => {
   const { barcode } = req.params;
 
   try {
@@ -52,5 +54,7 @@ router.get('/scan/:barcode', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+router.post('/bulk-insert', verifyToken, checkRole('admin', 'manager'), inventoryController.bulkInsertItems);
 
 module.exports = router;

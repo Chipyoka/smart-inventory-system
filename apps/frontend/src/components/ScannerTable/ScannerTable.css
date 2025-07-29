@@ -1,63 +1,166 @@
+:root {
+    --primary: #3412da;
+    --primary-light: #e4dbff;
+    --accent: #2e7d32;
+    --danger: #d32f2f;
+    --bg-light: #ffffff;
+    --text-dark: #222;
+    --text-light: #666;
+}
+
+/* Global resets */
+* {
+    box-sizing: border-box;
+}
+
+body,
+input,
+button {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Fullscreen centered wrapper with soft background */
 .scanner-ui-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 24px;
-    width: 100%;
+    background-color: rgba(0, 0, 0, 0.05);
+    z-index: 1000;
 }
 
+/* Main container card */
 .scanner-card {
-    background: #fff;
+    width: auto;
+    max-width: 100%;
+    height: 500px;
+    background-color: #fefefe;
+    border: 1px solid #ccc;
     border-radius: 12px;
-    padding: 24px;
-    width: 100%;
-    max-width: 900px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header and Footer */
+.scanner-header,
+.scanner-footer {
+    background: #f9f9f9;
+    padding: 16px;
 }
 
 .scanner-header {
-    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.scanner-footer {
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .scanner-header h2 {
     margin: 0;
-    font-size: 22px;
+    font-size: 24px;
+    color: var(--text-dark);
 }
 
 .scanner-header p {
-    color: #666;
-    font-size: 14px;
     margin-top: 4px;
+    font-size: 14px;
+    color: var(--text-light);
 }
 
+.close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    font-size: 28px;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    z-index: 10;
+    transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+    color: #d32f2f;
+}
+
+.scanner-card {
+    position: relative;
+}
+
+/* Scrollable content area */
 .scanner-body {
+    flex: 1;
     display: flex;
-    gap: 32px;
-    margin-top: 24px;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 16px;
+    overflow: auto;
 }
 
+/* Table & product list */
 .product-list {
-    flex: 2;
+    flex: 4;
+    min-width: 200px;
+    overflow: auto;
 }
 
 .sub-label {
-    font-size: 13px;
-    color: #aaa;
-    margin-bottom: 10px;
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 8px;
 }
 
 .product-list table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 10px;
 }
 
+.product-list th,
 .product-list td {
-    padding: 8px 4px;
-    font-size: 14px;
+    padding: 2px 1px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
 }
 
+.product-list thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f2f2f2;
+    z-index: 1;
+}
+
+.product-list input {
+    width: 100%;
+    padding: 6px;
+    font-size: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.product-list input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(52, 18, 218, 0.15);
+}
+
+/* Badge styles */
 .badge {
     background: #fff3cd;
     color: #ff9900;
@@ -67,77 +170,124 @@
     font-size: 13px;
 }
 
+/* Remove button */
 .remove-btn {
-    color: #d32f2f;
-    background: transparent;
+    color: var(--danger);
+    background: none;
     border: none;
     font-size: 14px;
     cursor: pointer;
+    transition: color 0.2s ease;
 }
 
 .remove-btn:hover {
     text-decoration: underline;
 }
 
+/* Scanner section */
 .scanner-box {
     flex: 1;
+    min-width: 250px;
+    max-width: 400px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    overflow: auto;
 }
 
 .scanner-preview {
     width: 100%;
-    height: 140px;
-    background: #ddd;
-    border-radius: 6px;
+    height: 160px;
+    background: #e0e0e0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     margin-bottom: 12px;
-    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Buttons */
+.scan-btn,
+.save-btn {
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 10px 20px;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .scan-btn {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border: none;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 10px 16px;
-    background: #f4f0ff;
-    color: #3412da;
-    border: none;
-    border-radius: 8px;
-    font-weight: 500;
     cursor: pointer;
 }
 
 .scan-btn:hover {
-    background: #e4dbff;
-}
-
-.status-tag {
-    margin-top: 8px;
-    font-size: 12px;
-    color: #2e7d32;
-    background: #e8f5e9;
-    padding: 4px 10px;
-    border-radius: 4px;
-}
-
-.scanner-footer {
-    display: flex;
-    justify-content: center;
-    margin-top: 24px;
+    background-color: #d6c8ff;
 }
 
 .save-btn {
-    padding: 14px 48px;
-    background-color: #3412da;
+    background-color: var(--primary);
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
     cursor: pointer;
 }
 
 .save-btn:hover {
-    background-color: #2b0bc4;
+    background-color: #2610a6;
+}
+
+.save-btn:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}
+
+/* Status messages */
+.status-tag {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--accent);
+    background: #e8f5e9;
+    padding: 6px 10px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .scanner-card {
+        height: auto;
+        flex-direction: column;
+    }
+
+    .scanner-body {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .scanner-box,
+    .product-list {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .scanner-footer {
+        justify-content: center;
+    }
+
+    .scanner-header,
+    .scanner-footer {
+        text-align: center;
+    }
+
+    .scanner-preview {
+        height: 140px;
+    }
+
+    input,
+    button {
+        font-size: 16px;
+    }
 }

@@ -6,7 +6,7 @@ import logo from '../../assets/logo.png';
 import { useUserStore } from '../../store/userStore';
 
 const Login = () => {
-  const [formData, setFormData] = useState({ email: '', password: '', role: '' });
+  const [formData, setFormData] = useState({ username: '', password: '', role: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -26,8 +26,8 @@ const Login = () => {
       const { data } = await axios.post('http://localhost:5000/api/auth/login', formData);
       localStorage.setItem('token', data.token);
 
-      const { name, role } = data.user;
-      setUser({ username: name, role });
+      const { username, role } = data.user;
+      setUser({ username, role });
 
       if (role === 'admin' || role === 'manager') {
         navigate('/dashboard');
@@ -37,7 +37,7 @@ const Login = () => {
         navigate('/');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login Failed');
+      setError(err.response?.data?.error || 'Login Failed');
     } finally {
       setLoading(false);
     }
@@ -66,13 +66,13 @@ const Login = () => {
 
           <form onSubmit={handleSubmit}>
             <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formData.username}
               onChange={handleChange}
               required
-              aria-label="Email"
+              aria-label="Username"
             />
 
             <input
