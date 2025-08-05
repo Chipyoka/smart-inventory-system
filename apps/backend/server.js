@@ -5,6 +5,7 @@ const cors = require("cors");
 // Route files (standardized names)
 const authRoutes = require("./routes/authRoutes"); 
 const inventoryRoutes = require("./routes/inventoryRoutes");
+const itemRoutes = require('./routes/itemRoutes');
 const externalLookupRoute = require('./routes/externalLookup'); 
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/inventory", inventoryRoutes);
+app.use('/api/items', itemRoutes);
 app.use('/api/external-lookup', externalLookupRoute);
 
 // Root Route

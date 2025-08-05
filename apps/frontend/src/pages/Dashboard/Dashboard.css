@@ -1,25 +1,90 @@
 .dashboard-container {
     width: 100%;
+    padding: 20px;
     box-sizing: border-box;
 }
 
+/* Flex row for desktop and large tablets */
 .dashboard-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
     gap: 20px;
-    width: auto;
+    margin-bottom: 20px;
 }
 
+/* Left section: Inventory Summary */
 .summary-wrapper {
     flex: 3;
 }
 
+/* Right section: Barcode Scanner */
 .barcode-wrapper {
     flex: 1;
 }
 
 .barcode-wrapper>* {
     height: 100%;
+    width: 100%;
+}
+
+/* Second row - left side: Most-in-Demand */
+.mid-wrapper {
+    flex: 2;
+}
+
+/* Second row - right side: Notifications + Supplier Chart */
+.right-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ========== Responsive Layout ========== */
+
+/* For tablets and below */
+@media (max-width: 1024px) {
+    .dashboard-row {
+        flex-direction: column;
+    }
+
+    .summary-wrapper,
+    .barcode-wrapper,
+    .mid-wrapper,
+    .right-column {
+        width: 100%;
+        flex: unset;
+    }
+
+    .right-column {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .right-column>* {
+        flex: 1;
+        min-width: 250px;
+    }
+}
+
+/* For mobile screens */
+@media (max-width: 600px) {
+    .dashboard-container {
+        padding: 10px;
+    }
+
+    .dashboard-row {
+        gap: 15px;
+    }
+
+    .right-column {
+        flex-direction: column;
+    }
+
+    .right-column>* {
+        width: 100%;
+    }
 }

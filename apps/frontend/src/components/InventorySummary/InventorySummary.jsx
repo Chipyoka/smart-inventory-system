@@ -23,24 +23,26 @@ const InventorySummary = () => {
   }, []);
 
   return (
-    <div className="inventory-summary-container">
-      <h2>Inventory Summary</h2>
-      <div className="summary-cards">
-        <div className="summary-card total">
-          <strong>{summary.totalItems}</strong>
-          <span>Total Items</span>
-        </div>
-        <div className="summary-card stocked">
-          <strong>{summary.newlyStocked}</strong>
-          <span>Newly Stocked</span>
-        </div>
-        <div className="summary-card expired">
-          <strong>{summary.expired}</strong>
-          <span>Expired Products</span>
-        </div>
-        <div className="summary-card outofstock">
-          <strong>{summary.outOfStock}</strong>
-          <span>Out of Stock</span>
+    <div className="inventory-summary-wrapper">
+      <div className="inventory-summary-container">
+        <h2>Inventory Summary</h2>
+        <div className="summary-cards">
+          <div className="summary-card total">
+            <strong>{summary.totalItems}</strong>
+            <span>Total Items</span>
+          </div>
+          <div className="summary-card stocked">
+            <strong>{summary.newlyStocked}</strong>
+            <span>Newly Stocked</span>
+          </div>
+          <div className="summary-card expired">
+            <strong>{summary.expired}</strong>
+            <span>Expired Products</span>
+          </div>
+          <div className="summary-card outofstock">
+            <strong>{summary.outOfStock}</strong>
+            <span>Out of Stock</span>
+          </div>
         </div>
       </div>
     </div>

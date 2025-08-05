@@ -1,65 +1,90 @@
+/* Layout Wrapper */
+.inventory-summary-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: auto;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.85rem;
+    color: #333;
+}
+
+/* Inner container */
 .inventory-summary-container {
-    padding: 16px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-bottom: 16px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    padding: 14px 16px;
 }
 
+/* Header */
 .inventory-summary-container h2 {
-    font-size: 16px;
-    font-weight: 400;
-    margin-bottom: 16px;
-    color: #000;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #222;
+    letter-spacing: 0.01em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 6px;
 }
 
+/* Grid layout */
 .summary-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 12px;
 }
 
+/* Card styling */
 .summary-card {
-    padding: 12px;
-    border-radius: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
     text-align: center;
-    background-color: #f9f9f9;
-    transition: transform 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    background-color: #f8f9fb;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    cursor: default;
 }
 
 .summary-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
+/* Count value */
 .summary-card strong {
     display: block;
-    font-size: 22px;
-    font-weight: bold;
-    color: #000;
-    margin-bottom: 2px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #111;
+    min-height: 24px;
+    margin-bottom: 4px;
 }
 
+/* Label text */
 .summary-card span {
     display: block;
-    font-size: 12px;
-    font-weight: 400;
-    color: #888;
+    font-size: 0.675rem;
+    font-weight: 500;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
-/* Colored number styles */
+/* Color themes */
 .summary-card.total strong {
-    color: black;
+    color: #222;
 }
 
 .summary-card.stocked strong {
-    color: green;
+    color: #2e7d32;
 }
 
 .summary-card.expired strong {
-    color: orange;
+    color: #ef6c00;
 }
 
 .summary-card.outofstock strong {
-    color: red;
+    color: #c62828;
 }
