@@ -21,6 +21,10 @@ router.get('/scan/:barcode', verifyToken, inventoryController.scanBarcode);
 // Get Item Details by Barcode
 router.get('/by-barcode/:barcode', verifyToken, inventoryController.getItemByBarcode);
 
+// Stocked Products Listing
+router.get('/stocked-products', verifyToken, inventoryController.getStockedProducts);
+
+
 // Bulk Insert or Update Items (with Audit Logging)
 router.post(
   '/bulk-insert',

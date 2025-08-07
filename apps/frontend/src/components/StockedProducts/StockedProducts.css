@@ -1,0 +1,167 @@
+.stocked-products-container {
+    padding: 12px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+    overflow-x: auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.stocked-products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.stocked-products-header h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.stocked-products-controls {
+    display: flex;
+    align-items: center;
+}
+
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.search-icon {
+    color: #888;
+    font-size: 1rem;
+}
+
+.search-input {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    min-width: 180px;
+    font-size: 0.8rem;
+    transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+    border-color: #007bff;
+}
+
+.stocked-products-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    min-width: 800px;
+}
+
+.stocked-products-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9;
+    z-index: 2;
+    cursor: pointer;
+    user-select: none;
+    padding: 8px 6px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+    padding-right: 18px;
+    /* space for sort icons */
+    color: #444;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.stocked-products-table thead th:hover,
+.stocked-products-table thead th:focus {
+    background-color: #e6f0ff;
+    outline: none;
+}
+
+.stocked-products-table tbody td {
+    padding: 8px 6px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    vertical-align: middle;
+    max-width: 120px;
+}
+
+.stocked-products-table tbody tr:hover {
+    background-color: #f2f8ff;
+}
+
+.sortable svg {
+    vertical-align: middle;
+    margin-left: 3px;
+    color: #007bff;
+    font-size: 0.9rem;
+}
+
+.truncate {
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.low-stock {
+    color: #d9534f;
+    font-weight: 600;
+    background-color: #f9d6d5;
+    border-radius: 3px;
+    padding: 1px 4px;
+}
+
+.no-results {
+    text-align: center;
+    padding: 16px;
+    color: #999;
+    font-size: 0.85rem;
+}
+
+.visually-hidden {
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
+}
+
+/* Pagination styles */
+.pagination {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.pagination button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.pagination-info {
+    font-size: 0.8rem;
+    color: #555;
+    user-select: none;
+}

@@ -1,0 +1,44 @@
+.dashboard-container {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: #f8f9fc;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 12px;
+}
+
+.dashboard-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.summary-wrapper {
+    flex: 1 1 65%;
+    background: #fff;
+    border-radius: 6px;
+    padding: auto;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.barcode-wrapper {
+    flex: 1 1 32%;
+    background: #1900ff;
+    border-radius: 6px;
+    padding: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    min-height: 80px;
+}
+
+.stocked-products-wrapper {
+    background: #fff;
+    border-radius: 6px;
+    padding: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}

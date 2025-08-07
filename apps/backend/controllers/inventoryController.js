@@ -20,6 +20,36 @@ const insertAuditLogs = async (logs) => {
   await db.query(sqlInsertAuditLogs, [logs]);
 };
 
+exports.getStockedProducts = async (req, res) => {
+  try {
+    const sql = `
+      SELECT 
+        i.product_id,
+        i.name,
+        i.barcode,
+        i.stock,
+        i.quality,
+        i.location,
+        i.expiry_date,
+        i.batch_number,
+        i.selling_price,
+        c.name AS category_name,
+        s.name AS supplier_name
+      FROM items i
+      LEFT JOIN categories c ON i.category_id = c.category_id
+      LEFT JOIN suppliers s ON i.supplier_id = s.supplier_id
+      WHERE i.stock > 0
+      ORDER BY i.name ASC
+    `;
+    const [rows] = await db.query(sql);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('getStockedProducts error:', error);
+    res.status(500).json({ message: 'Failed to fetch stocked products' });
+  }
+};
+
+
 // GET /summary
 exports.getInventorySummary = async (req, res) => {
   try {
