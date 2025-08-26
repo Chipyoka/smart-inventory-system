@@ -1,6 +1,7 @@
 import React from 'react';
 import InventorySummary from '../../components/InventorySummary/InventorySummary';
 import ReportButton from '../../components/ReportButton/ReportButton';
+import AnalyticsGrid from '../../components/Inventory/InventoryAnalytics';
 import { useUserStore } from '../../store/userStore';
 import './Analytics.css';
 
@@ -15,9 +16,9 @@ const Analytics = () => {
           <ReportButton />
         </div>
       </div>
-      {/* <div className="stocked-products-wrapper">
-        <StockedProducts />
-      </div> */}
+      <div className="analytics-wrapper">
+        <AnalyticsGrid />
+        </div>
     </div>
 
   );

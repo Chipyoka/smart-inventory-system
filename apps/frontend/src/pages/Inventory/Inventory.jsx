@@ -18,6 +18,9 @@ const Inventory = () => {
       <div className="stocked-products-wrapper">
         <StockedProducts />
       </div>
+      <div className="analytics-wrapper">
+        <></>
+      </div>
     </div>
   );
 };
