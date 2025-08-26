@@ -26,7 +26,6 @@ const Dashboard = () => {
         </div>
         <div className="right-column">
           <NotificationsCenter />
-          <SupplierPerformance />
         </div>
       </div>
 
