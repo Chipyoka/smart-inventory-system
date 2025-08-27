@@ -4,8 +4,14 @@
     --accent: #2e7d32;
     --danger: #d32f2f;
     --bg-light: #ffffff;
-    --text-dark: #222;
-    --text-light: #666;
+    --text-dark: #111;
+    /* Darker for better readability */
+    --text-light: #555;
+    /* Slightly darker for contrast */
+    --text-muted: #888;
+    /* For secondary info */
+    --border-light: #ccc;
+    --hover-bg: #f0f0f0;
 }
 
 /* Global resets */
@@ -19,6 +25,8 @@ button {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.5;
+    color: var(--text-dark);
+    background-color: var(--bg-light);
 }
 
 /* Fullscreen centered wrapper with soft background */
@@ -32,7 +40,8 @@ button {
     justify-content: center;
     align-items: center;
     padding: 24px;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.08);
+    /* slightly darker overlay */
     z-index: 1000;
 }
 
@@ -41,28 +50,29 @@ button {
     width: auto;
     max-width: 100%;
     height: 500px;
-    background-color: #fefefe;
-    border: 1px solid #ccc;
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-light);
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
 }
 
 /* Header and Footer */
 .scanner-header,
 .scanner-footer {
-    background: #f9f9f9;
+    background: #fafafa;
     padding: 16px;
 }
 
 .scanner-header {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--border-light);
 }
 
 .scanner-footer {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--border-light);
     display: flex;
     justify-content: flex-end;
 }
@@ -76,7 +86,7 @@ button {
 .scanner-header p {
     margin-top: 4px;
     font-size: 14px;
-    color: var(--text-light);
+    color: var(--text-muted);
 }
 
 .close-btn {
@@ -87,18 +97,14 @@ button {
     border: none;
     font-size: 28px;
     font-weight: bold;
-    color: #888;
+    color: var(--text-muted);
     cursor: pointer;
     z-index: 10;
     transition: color 0.2s ease;
 }
 
 .close-btn:hover {
-    color: #d32f2f;
-}
-
-.scanner-card {
-    position: relative;
+    color: var(--danger);
 }
 
 /* Scrollable content area */
@@ -120,36 +126,38 @@ button {
 
 .sub-label {
     font-size: 14px;
-    color: #777;
+    color: var(--text-muted);
     margin-bottom: 8px;
 }
 
 .product-list table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 10px;
+    font-size: 12px;
+    color: var(--text-dark);
 }
 
 .product-list th,
 .product-list td {
-    padding: 2px 1px;
-    border-bottom: 1px solid #ddd;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border-light);
     text-align: left;
 }
 
 .product-list thead th {
     position: sticky;
     top: 0;
-    background-color: #f2f2f2;
+    background-color: var(--primary-light);
+    color: var(--text-dark);
     z-index: 1;
 }
 
 .product-list input {
     width: 100%;
     padding: 6px;
-    font-size: 10px;
-    background: white;
-    border: 1px solid #ccc;
+    font-size: 12px;
+    background: var(--bg-light);
+    border: 1px solid var(--border-light);
     border-radius: 4px;
     transition: all 0.2s ease;
 }
@@ -197,8 +205,8 @@ button {
 .scanner-preview {
     width: 100%;
     height: 160px;
-    background: #e0e0e0;
-    border: 1px solid #ccc;
+    background: var(--hover-bg);
+    border: 1px solid var(--border-light);
     border-radius: 4px;
     margin-bottom: 12px;
 }
@@ -210,7 +218,7 @@ button {
     font-weight: 600;
     border-radius: 6px;
     padding: 10px 20px;
-    transition: background 0.2s ease, box-shadow 0.2s ease;
+    transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
 }
 
 .scan-btn {
@@ -226,11 +234,12 @@ button {
 
 .scan-btn:hover {
     background-color: #d6c8ff;
+    color: var(--primary-dark);
 }
 
 .save-btn {
     background-color: var(--primary);
-    color: white;
+    color: var(--bg-light);
     border: none;
     cursor: pointer;
 }

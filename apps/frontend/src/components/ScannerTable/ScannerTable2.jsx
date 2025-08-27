@@ -1,241 +1,148 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
-import axios from "axios";
+import axios from "../../api/axiosInstance";
 import "./ScannerTable2.css";
 
-const ScannerTable2 = ({ onClose }) => {
-  const codeReaderRef = useRef(null);
+const ScannerDelete = ({ onClose }) => {
   const videoRef = useRef(null);
+  const codeReaderRef = useRef(null);
 
   const [scanning, setScanning] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [scannedItems, setScannedItems] = useState([]);
-  const [status, setStatus] = useState("");
+  const [toasts, setToasts] = useState([]);
 
-  // Safe reset scanner instance
-  const safeReset = async () => {
-    if (codeReaderRef.current && typeof codeReaderRef.current.reset === "function") {
-      try {
-        await codeReaderRef.current.reset();
-      } catch (err) {
-        console.warn("Scanner reset error:", err);
-      }
-    }
+  const addToast = (message, type = "info") => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3000);
   };
 
-  // Initialize scanner instance once on mount
-  useEffect(() => {
+  const startScan = async () => {
+    if (!videoRef.current) return addToast("Camera not available", "error");
+    setScanning(true);
     codeReaderRef.current = new BrowserMultiFormatReader();
 
-    return () => {
-      safeReset();
-    };
-  }, []);
-
-  // Start scanning once triggered
-  const startScan = async () => {
-    if (!videoRef.current) {
-      setStatus("Camera not available");
-      return;
-    }
-
-    setStatus("Initializing scanner...");
-    setScanning(true);
-
-    try {
-      const result = await codeReaderRef.current.decodeOnceFromVideoDevice(undefined, videoRef.current);
-      const scannedCode = result.text;
-
-      setStatus(`Scanned: ${scannedCode}`);
-      await fetchItem(scannedCode);
-
-    } catch (err) {
-      console.warn("Scan error or cancelled:", err);
-      setStatus("Scan error or cancelled");
-    } finally {
-      await safeReset();
-      setScanning(false);
-      setBarcode("");
-    }
-  };
-
-  // Stop scanning manually
-  const stopScan = async () => {
-    await safeReset();
-    setScanning(false);
-    setStatus("Scan stopped");
-  };
-
-  // Fetch item info from backend by barcode
-  const fetchItem = async (code) => {
-    if (!code) return;
-
-    try {
-      const res = await axios.get(`/api/items/by-barcode/${code}`);
-
-      if (res.status === 200 && res.data) {
-        // Prevent duplicates by product_id
-        if (!scannedItems.some(item => item.product_id === res.data.product_id)) {
-          setScannedItems(prev => [...prev, res.data]);
-          setStatus(`Item "${res.data.name || "Unnamed"}" added.`);
+    codeReaderRef.current.decodeFromVideoDevice(null, videoRef.current, async (result, err) => {
+      if (result) {
+        const code = result.getText();
+        if (!scannedItems.some(i => i.barcode === code)) {
+          try {
+            const { data } = await axios.get(`/api/items/by-barcode/${code}`);
+            setScannedItems(prev => [...prev, data]);
+            addToast(`Item "${data.name}" added`, "success");
+          } catch (err) {
+            addToast("Item not found", "error");
+          }
         } else {
-          setStatus("Item already scanned.");
+          addToast("Item already scanned", "warning");
         }
-      } else {
-        setStatus("Item not found.");
       }
-    } catch (err) {
-      if (err.response?.status === 404) {
-        setStatus("Item not found for barcode.");
-      } else {
-        console.error("Fetch item error:", err);
-        setStatus("Error fetching item data.");
-      }
-    }
+      if (err && err.name !== "NotFoundException") console.warn(err);
+    });
   };
 
-  // Manual barcode submit handler
-  const handleManualSubmit = async (e) => {
+  const stopScan = async () => {
+    if (codeReaderRef.current) codeReaderRef.current.reset();
+    setScanning(false);
+  };
+
+  const handleManualSubmit = async e => {
     e.preventDefault();
     if (!barcode.trim()) return;
-
-    await fetchItem(barcode.trim());
+    try {
+      const { data } = await axios.get(`/api/items/by-barcode/${barcode}`);
+      if (!scannedItems.some(i => i.barcode === data.barcode)) {
+        setScannedItems(prev => [...prev, data]);
+        addToast(`Item "${data.name}" added`, "success");
+      } else addToast("Item already scanned", "warning");
+    } catch (err) {
+      addToast("Item not found", "error");
+    }
     setBarcode("");
   };
 
-  // Remove one item from scanned list by index
-  const handleDeleteItem = (index) => {
+  const handleDeleteItem = index => {
+    const removed = scannedItems[index];
     setScannedItems(prev => prev.filter((_, i) => i !== index));
+    addToast(`Removed "${removed.name}"`, "warning");
   };
 
-  // Save: send bulk delete request with product IDs
-  const handleSave = async () => {
-    if (scannedItems.length === 0) {
-      setStatus("No items to delete.");
-      return;
-    }
-
-    const productIds = scannedItems.map(item => item.product_id);
-
+  const handleBulkDelete = async () => {
+    if (!scannedItems.length) return addToast("No items to delete", "error");
+    const barcodes = scannedItems.map(i => i.barcode);
     try {
-      await axios.post("/api/items/bulk-delete", { product_ids: productIds });
-      setStatus(`Deleted ${productIds.length} item(s) successfully.`);
+      const { data } = await axios.post("/api/items/delete", { barcodes });
       setScannedItems([]);
+      addToast(data.message, "success");
     } catch (err) {
-      console.error("Bulk delete error:", err);
-      setStatus("Failed to delete items.");
+      console.error(err);
+      addToast("Failed to delete items", "error");
     }
   };
 
   return (
     <div className="scanner-ui-wrapper">
-      <div className="scanner-card">
-        <button className="close-btn" onClick={onClose} aria-label="Close scanner modal">&times;</button>
+      <div className="toast-container">
+        {toasts.map(t => <div key={t.id} className={`toast toast-${t.type}`}>{t.message}</div>)}
+      </div>
 
-        <div className="scanner-header">
-          <h2>Remove Inventory</h2>
-          <p>Scan or enter barcodes to remove items from inventory.</p>
-        </div>
+      <div className="scanner-card">
+        <button className="close-btn" onClick={onClose}>&times;</button>
 
         <div className="scanner-body">
-          {/* Left: scanned items list */}
           <div className="product-list">
-            <p className="sub-label">Scanned Items</p>
             <table>
               <thead>
                 <tr>
                   <th>#</th>
                   <th>Barcode</th>
                   <th>Name</th>
-                  <th>Category</th>
-                  <th>Batch</th>
-                  <th>Expiry</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {scannedItems.length === 0 ? (
-                  <tr>
-                    <td colSpan="7" style={{ textAlign: "center" }}>No items scanned yet.</td>
+                  <tr><td colSpan="4">No items scanned</td></tr>
+                ) : scannedItems.map((item, idx) => (
+                  <tr key={item.product_id}>
+                    <td>{idx + 1}</td>
+                    <td>{item.barcode}</td>
+                    <td>{item.name}</td>
+                    <td>
+                      <button onClick={() => handleDeleteItem(idx)}>Remove</button>
+                    </td>
                   </tr>
-                ) : (
-                  scannedItems.map((item, index) => (
-                    <tr key={item.product_id}>
-                      <td>{index + 1}</td>
-                      <td>{item.barcode || "-"}</td>
-                      <td>{item.name || "-"}</td>
-                      <td>{item.category_name || item.category || "-"}</td>
-                      <td>{item.batch_number || "-"}</td>
-                      <td>{item.expiry_date ? new Date(item.expiry_date).toLocaleDateString() : "-"}</td>
-                      <td>
-                        <button
-                          className="remove-btn"
-                          onClick={() => handleDeleteItem(index)}
-                          aria-label={`Remove ${item.name || "item"}`}
-                        >
-                          Remove
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
+                ))}
               </tbody>
             </table>
           </div>
 
-          {/* Right: scanner + manual input */}
           <div className="scanner-box">
-            <video
-              ref={videoRef}
-              className="scanner-preview"
-              muted
-              autoPlay
-              playsInline
-              style={{ width: "100%", height: "auto" }}
-            />
-
-            <button
-              className="scan-btn"
-              onClick={scanning ? stopScan : startScan}
-              disabled={scanning}
-              aria-live="polite"
-            >
-              {scanning ? "Scanning..." : "Scan"}
+            <video ref={videoRef} className="scanner-preview" muted autoPlay playsInline />
+            <button onClick={scanning ? stopScan : startScan}>
+              {scanning ? "Stop Scanning" : "Start Scanning"}
             </button>
 
-            <form onSubmit={handleManualSubmit} className="manual-barcode-form">
-              <label htmlFor="manual-barcode">Enter Barcode Manually</label>
+            <form onSubmit={handleManualSubmit}>
               <input
-                id="manual-barcode"
                 type="text"
                 value={barcode}
-                onChange={(e) => setBarcode(e.target.value)}
-                placeholder="e.g. 8901234567890"
-                autoComplete="off"
+                onChange={e => setBarcode(e.target.value)}
+                placeholder="Enter barcode"
                 disabled={scanning}
               />
-              <button className="scan-btn" type="submit" disabled={scanning}>
-                Add
-              </button>
+              <button type="submit" disabled={scanning}>Add</button>
             </form>
-
-            {status && <div className="status-tag" aria-live="polite">{status}</div>}
           </div>
         </div>
 
         <div className="scanner-footer">
-          <button
-            className="save-btn"
-            onClick={handleSave}
-            disabled={scannedItems.length === 0 || scanning}
-            title={scannedItems.length === 0 ? "No items to delete" : ""}
-          >
-            Delete & Save
-          </button>
+          <button onClick={handleBulkDelete} disabled={!scannedItems.length}>Delete & Save</button>
         </div>
       </div>
     </div>
   );
 };
 
-export default ScannerTable2;
+export default ScannerDelete;
