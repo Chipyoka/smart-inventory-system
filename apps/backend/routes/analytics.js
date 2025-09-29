@@ -73,17 +73,18 @@ router.get('/audit-activity-30d', async (req, res) => {
   try {
     const [rows] = await db.execute(`
       SELECT 
-        DATE(a.action_timestamp) AS date,
-        SUM(a.action_type = 'insert') AS inserts,
-        SUM(a.action_type = 'update') AS updates,
-        SUM(a.action_type = 'delete') AS deletes
+        DATE(a.action_time) AS date,
+        SUM(UPPER(a.action_type) = 'INSERT' OR UPPER(a.action_type) = 'INSERT/UPDATE') AS inserts,
+        SUM(UPPER(a.action_type) = 'UPDATE' OR UPPER(a.action_type) = 'INSERT/UPDATE') AS updates,
+        SUM(UPPER(a.action_type) = 'DELETE') AS deletes
       FROM audit_logs a
-      WHERE a.action_timestamp >= CURDATE() - INTERVAL 29 DAY
-      GROUP BY DATE(a.action_timestamp)
-      ORDER BY DATE(a.action_timestamp);
+      WHERE a.action_time >= CURDATE() - INTERVAL 29 DAY
+      GROUP BY DATE(a.action_time)
+      ORDER BY DATE(a.action_time);
     `);
     res.json(rows);
   } catch (e) {
+    console.error("audit-activity-30d error:", e);
     res.status(500).json({ message: 'Error computing audit trend', error: e.message });
   }
 });

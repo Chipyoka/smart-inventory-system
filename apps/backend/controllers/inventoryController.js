@@ -1,7 +1,9 @@
 const db = require('../config/db');
 const { v4: uuidv4 } = require('uuid');
 
+// ------------------------
 // Helper: Insert audit logs
+// ------------------------
 const insertAuditLogs = async (logs) => {
   if (!logs.length) return;
 
@@ -20,6 +22,18 @@ const insertAuditLogs = async (logs) => {
   await db.query(sqlInsertAuditLogs, [logs]);
 };
 
+// ------------------------
+// Helper: Generate next sequential 7-digit product_id
+// ------------------------
+const generateSequentialId = async () => {
+  const [rows] = await db.query("SELECT MAX(CAST(product_id AS UNSIGNED)) AS max_id FROM items");
+  const nextId = (rows[0].max_id || 0) + 1;
+  return nextId.toString().padStart(7, '0'); // e.g., '0000001'
+};
+
+// ------------------------
+// GET /stocked-products
+// ------------------------
 exports.getStockedProducts = async (req, res) => {
   try {
     const sql = `
@@ -49,29 +63,18 @@ exports.getStockedProducts = async (req, res) => {
   }
 };
 
-
+// ------------------------
 // GET /summary
+// ------------------------
 exports.getInventorySummary = async (req, res) => {
   try {
     const sql = `
       SELECT
         COUNT(*) AS total_items,
         SUM(stock) AS total_stock,
-        (
-          SELECT COUNT(*) 
-          FROM items 
-          WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-        ) AS newly_stocked,
-        (
-          SELECT COUNT(*) 
-          FROM items 
-          WHERE expiry_date IS NOT NULL AND expiry_date < CURDATE()
-        ) AS expired,
-        (
-          SELECT COUNT(*) 
-          FROM items 
-          WHERE stock = 0
-        ) AS out_of_stock
+        (SELECT COUNT(*) FROM items WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)) AS newly_stocked,
+        (SELECT COUNT(*) FROM items WHERE expiry_date IS NOT NULL AND expiry_date < CURDATE()) AS expired,
+        (SELECT COUNT(*) FROM items WHERE stock = 0) AS out_of_stock
       FROM items
     `;
     const [rows] = await db.query(sql);
@@ -88,17 +91,15 @@ exports.getInventorySummary = async (req, res) => {
   }
 };
 
-
-
+// ------------------------
 // GET /scan/:barcode
+// ------------------------
 exports.scanBarcode = async (req, res) => {
   const { barcode } = req.params;
   try {
     const sql = 'SELECT * FROM items WHERE barcode = ? LIMIT 1';
     const [rows] = await db.query(sql, [barcode]);
-    if (rows.length === 0) {
-      return res.status(404).json({ message: 'Barcode not found' });
-    }
+    if (!rows.length) return res.status(404).json({ message: 'Barcode not found' });
     res.status(200).json(rows[0]);
   } catch (error) {
     console.error('scanBarcode error:', error);
@@ -106,21 +107,15 @@ exports.scanBarcode = async (req, res) => {
   }
 };
 
+// ------------------------
 // GET /by-barcode/:barcode
+// ------------------------
 exports.getItemByBarcode = async (req, res) => {
   const { barcode } = req.params;
-  console.log("Received barcode:", barcode);  // <-- Debug log
-
   try {
     const sql = "SELECT * FROM items WHERE barcode = ? LIMIT 1";
     const [rows] = await db.query(sql, [barcode]);
-
-    console.log("DB query result:", rows); // <-- Debug log
-
-    if (rows.length === 0) {
-      return res.status(404).json({ message: "Item not found" });
-    }
-
+    if (!rows.length) return res.status(404).json({ message: "Item not found" });
     res.status(200).json(rows[0]);
   } catch (error) {
     console.error("getItemByBarcode error:", error);
@@ -128,107 +123,114 @@ exports.getItemByBarcode = async (req, res) => {
   }
 };
 
+// ------------------------
 // POST /bulk-insert
+// ------------------------
 exports.bulkInsertItems = async (req, res) => {
   const { items } = req.body;
   const userId = req.user.id;
 
-  if (!Array.isArray(items) || items.length === 0) {
+  if (!Array.isArray(items) || items.length === 0)
     return res.status(400).json({ message: 'No items to insert' });
-  }
-
-  const values = items.map(item => [
-    item.product_id || uuidv4(),
-    item.name,
-    item.barcode,
-    item.category_id,
-    item.supplier_id,
-    item.selling_price,
-    item.quantity,
-    item.quality,
-    item.location,
-    item.batch_number,
-    item.expiry_date
-  ]);
-
-  const sqlInsertItems = `
-    INSERT INTO items (
-      product_id,
-      name,
-      barcode,
-      category_id,
-      supplier_id,
-      selling_price,
-      stock,
-      quality,
-      location,
-      batch_number,
-      expiry_date
-    ) VALUES ?
-    ON DUPLICATE KEY UPDATE 
-      name = VALUES(name),
-      category_id = VALUES(category_id),
-      supplier_id = VALUES(supplier_id),
-      selling_price = VALUES(selling_price),
-      stock = stock + VALUES(stock),
-      quality = VALUES(quality),
-      location = VALUES(location),
-      batch_number = VALUES(batch_number),
-      expiry_date = VALUES(expiry_date)
-  `;
 
   try {
-    await db.query(sqlInsertItems, [values]);
+    const values = [];
 
-    // Prepare audit logs for inserted/updated items
-    const auditLogs = values.map(value => [
+    for (const item of items) {
+      // Generate product_id if not provided
+      const product_id = item.product_id || await generateSequentialId();
+
+      values.push([
+        product_id,
+        item.name || '',
+        item.barcode,           // preserve barcode exactly as received
+        item.category_id || null,
+        item.supplier_id || null,
+        parseFloat(item.selling_price) || 0,
+        parseInt(item.quantity) || 1, // stock
+        item.quality || '',
+        item.location || '',
+        item.batch_number || '',
+        item.expiry_date || null
+      ]);
+    }
+
+    const sqlInsertItems = `
+      INSERT INTO items (
+        product_id,
+        name,
+        barcode,
+        category_id,
+        supplier_id,
+        selling_price,
+        stock,
+        quality,
+        location,
+        batch_number,
+        expiry_date
+      ) VALUES ?
+      ON DUPLICATE KEY UPDATE 
+        name = VALUES(name),
+        category_id = VALUES(category_id),
+        supplier_id = VALUES(supplier_id),
+        selling_price = VALUES(selling_price),
+        stock = stock + VALUES(stock),
+        quality = VALUES(quality),
+        location = VALUES(location),
+        batch_number = VALUES(batch_number),
+        expiry_date = VALUES(expiry_date)
+    `;
+
+    const [result] = await db.query(sqlInsertItems, [values]);
+
+    // Audit logs
+    const now = new Date();
+    const auditLogs = values.map(v => [
       userId,
       'INSERT/UPDATE',
-      value[0],    // product_id
-      value[1],    // name
-      value[2],    // barcode
-      value[6],    // stock/quantity
-      value[8],    // location
-      new Date()
+      v[0],
+      v[1],
+      v[2],
+      v[6], // stock
+      v[8], // location
+      now
     ]);
-
     await insertAuditLogs(auditLogs);
 
-    res.status(200).json({
-      message: 'Items inserted/updated successfully',
-      inserted: values.length,
-      audited: auditLogs.length
+    res.status(200).json({ 
+      message: 'Items inserted/updated successfully', 
+      inserted: result.affectedRows, 
+      audited: auditLogs.length 
     });
+
   } catch (error) {
     console.error('bulkInsertItems error:', error);
-    res.status(500).json({ message: 'Failed to insert items' });
+    res.status(500).json({ message: 'Failed to insert items', error: error.message });
   }
 };
 
+
+// ------------------------
 // POST /bulk-delete
+// ------------------------
 exports.bulkDeleteItems = async (req, res) => {
   const { product_ids } = req.body;
   const userId = req.user.id;
 
-  if (!Array.isArray(product_ids) || product_ids.length === 0) {
+  if (!Array.isArray(product_ids) || !product_ids.length)
     return res.status(400).json({ message: 'No product IDs provided for deletion' });
-  }
 
   try {
-    // Fetch items for audit logging before deletion
     const placeholders = product_ids.map(() => '?').join(',');
     const sqlSelectItems = `SELECT * FROM items WHERE product_id IN (${placeholders})`;
     const [itemsToDelete] = await db.query(sqlSelectItems, product_ids);
 
-    if (!itemsToDelete.length) {
-      return res.status(404).json({ message: 'No matching items found to delete' });
-    }
+    if (!itemsToDelete.length) return res.status(404).json({ message: 'No matching items found to delete' });
 
-    // Delete items
     const sqlDelete = `DELETE FROM items WHERE product_id IN (${placeholders})`;
     await db.query(sqlDelete, product_ids);
 
-    // Prepare audit logs
+    const now = new Date();
     const auditLogs = itemsToDelete.map(item => [
       userId,
       'DELETE',
@@ -237,15 +239,14 @@ exports.bulkDeleteItems = async (req, res) => {
       item.barcode,
       item.stock,
       item.location,
-      new Date()
+      now
     ]);
-
     await insertAuditLogs(auditLogs);
 
-    res.status(200).json({
-      message: `Deleted ${itemsToDelete.length} item(s) successfully`,
-      deleted: itemsToDelete.length,
-      audited: auditLogs.length
+    res.status(200).json({ 
+      message: `Deleted ${itemsToDelete.length} item(s) successfully`, 
+      deleted: itemsToDelete.length, 
+      audited: auditLogs.length 
     });
   } catch (error) {
     console.error('bulkDeleteItems error:', error);
