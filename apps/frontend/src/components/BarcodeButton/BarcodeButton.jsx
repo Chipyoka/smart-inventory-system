@@ -11,10 +11,10 @@ const BarcodeButton = () => {
   if (!['admin', 'manager'].includes(role)) return null;
 
   return (
-    <div className="barcode-button-container">
-      <button className="barcode-btn" onClick={() => setOpen(true)}>
-        <div className="barcode-label">Scan New Item</div>
-        <FaBarcode className="barcode-icon" />
+    <div className="bb-unique-container">
+      <button className="bb-unique-btn" onClick={() => setOpen(true)}>
+        <div className="bb-unique-label">Scan New Item</div>
+        <FaBarcode className="bb-unique-icon" />
       </button>
       {open && <ScanningActions onClose={() => setOpen(false)} />}
     </div>

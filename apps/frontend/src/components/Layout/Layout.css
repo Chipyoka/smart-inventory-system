@@ -1,22 +1,22 @@
-/* Layout wrapper holding the topbar and main body */
-.layout-wrapper {
+/* Wrapper holding the topbar and main body */
+.lyt-wrapper-unique {
     display: flex;
     flex-direction: column;
     height: 100vh;
     overflow: hidden;
 }
 
-/* Layout body contains sidebar and main content */
-.layout-body {
+/* Layout body containing sidebar and main content */
+.lyt-body-unique {
     display: flex;
     flex: 1;
     height: calc(100vh - 64px);
-    /* Adjust if Topbar height is different */
+    /* adjust if Topbar height changes */
     overflow: hidden;
 }
 
 /* Main content area */
-.layout-content {
+.lyt-content-unique {
     flex: 1;
     padding: 2rem;
     overflow-y: auto;

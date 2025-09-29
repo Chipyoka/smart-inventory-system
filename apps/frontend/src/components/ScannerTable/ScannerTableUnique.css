@@ -1,26 +1,25 @@
 :root {
-    --scanner-primary: #3412da;
-    --scanner-primary-light: #e4dbff;
-    --scanner-accent: #2e7d32;
-    --scanner-danger: #d32f2f;
-    --scanner-bg-light: #ffffff;
-    --scanner-text-dark: #111;
-    --scanner-text-light: #555;
-    --scanner-text-muted: #888;
-    --scanner-border-light: #ccc;
-    --scanner-hover-bg: #f0f0f0;
+    --invscan-primary: #3412da;
+    --invscan-primary-light: #e4dbff;
+    --invscan-accent: #2e7d32;
+    --invscan-danger: #d32f2f;
+    --invscan-bg-light: #fff;
+    --invscan-text-dark: #111;
+    --invscan-text-muted: #888;
+    --invscan-border: #ccc;
+    --invscan-hover-bg: #f0f0f0;
 }
 
 /* Global resets */
-.scanner-unique-wrapper *,
-.scanner-unique-wrapper *::before,
-.scanner-unique-wrapper *::after {
+.invscan-wrapper *,
+.invscan-wrapper *::before,
+.invscan-wrapper *::after {
     box-sizing: border-box;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 /* Fullscreen wrapper */
-.scanner-unique-wrapper {
+.invscan-wrapper {
     position: fixed;
     top: 0;
     left: 0;
@@ -35,12 +34,12 @@
 }
 
 /* Main card */
-.scanner-unique-card {
+.invscan-card {
     width: auto;
     max-width: 100%;
     height: 500px;
-    background-color: var(--scanner-bg-light);
-    border: 1px solid var(--scanner-border-light);
+    background: var(--invscan-bg-light);
+    border: 1px solid var(--invscan-border);
     border-radius: 12px;
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
     display: flex;
@@ -50,37 +49,37 @@
 }
 
 /* Header & footer */
-.scanner-unique-header,
-.scanner-unique-footer {
+.invscan-header,
+.invscan-footer {
     background: #fafafa;
     padding: 16px;
 }
 
-.scanner-unique-header {
-    border-bottom: 1px solid var(--scanner-border-light);
+.invscan-header {
+    border-bottom: 1px solid var(--invscan-border);
     text-align: center;
 }
 
-.scanner-unique-footer {
-    border-top: 1px solid var(--scanner-border-light);
+.invscan-footer {
+    border-top: 1px solid var(--invscan-border);
     display: flex;
     justify-content: flex-end;
 }
 
-.scanner-unique-header h2 {
+.invscan-header h2 {
     margin: 0;
     font-size: 24px;
-    color: var(--scanner-text-dark);
+    color: var(--invscan-text-dark);
 }
 
-.scanner-unique-header p {
+.invscan-header p {
     margin-top: 4px;
     font-size: 14px;
-    color: var(--scanner-text-muted);
+    color: var(--invscan-text-muted);
 }
 
 /* Close button */
-.scanner-unique-close-btn {
+.invscan-close-btn {
     position: absolute;
     top: 12px;
     right: 16px;
@@ -88,18 +87,17 @@
     border: none;
     font-size: 28px;
     font-weight: bold;
-    color: var(--scanner-text-muted);
+    color: var(--invscan-text-muted);
     cursor: pointer;
-    z-index: 10;
     transition: color 0.2s ease;
 }
 
-.scanner-unique-close-btn:hover {
-    color: var(--scanner-danger);
+.invscan-close-btn:hover {
+    color: var(--invscan-danger);
 }
 
 /* Body */
-.scanner-unique-body {
+.invscan-body {
     flex: 1;
     display: flex;
     flex-wrap: wrap;
@@ -108,59 +106,58 @@
     overflow: auto;
 }
 
-/* Product list table */
-.scanner-unique-product-list {
+/* Product list */
+.invscan-product-list {
     flex: 4;
     min-width: 200px;
     overflow: auto;
 }
 
-.scanner-unique-sub-label {
+.invscan-sub-label {
     font-size: 14px;
-    color: var(--scanner-text-muted);
+    color: var(--invscan-text-muted);
     margin-bottom: 8px;
 }
 
-.scanner-unique-product-list table {
+.invscan-product-list table {
     width: 100%;
     border-collapse: collapse;
     font-size: 12px;
-    color: var(--scanner-text-dark);
+    color: var(--invscan-text-dark);
 }
 
-.scanner-unique-product-list th,
-.scanner-unique-product-list td {
+.invscan-product-list th,
+.invscan-product-list td {
     padding: 6px 8px;
-    border-bottom: 1px solid var(--scanner-border-light);
+    border-bottom: 1px solid var(--invscan-border);
     text-align: left;
 }
 
-.scanner-unique-product-list thead th {
+.invscan-product-list thead th {
     position: sticky;
     top: 0;
-    background-color: var(--scanner-primary-light);
-    color: var(--scanner-text-dark);
+    background: var(--invscan-primary-light);
+    color: var(--invscan-text-dark);
     z-index: 1;
 }
 
-.scanner-unique-product-list input {
+.invscan-product-list input {
     width: 100%;
     padding: 6px;
     font-size: 12px;
-    background: var(--scanner-bg-light);
-    border: 1px solid var(--scanner-border-light);
+    border: 1px solid var(--invscan-border);
     border-radius: 4px;
     transition: all 0.2s ease;
 }
 
-.scanner-unique-product-list input:focus {
+.invscan-product-list input:focus {
     outline: none;
-    border-color: var(--scanner-primary);
+    border-color: var(--invscan-primary);
     box-shadow: 0 0 0 2px rgba(52, 18, 218, 0.15);
 }
 
 /* Badge */
-.scanner-unique-badge {
+.invscan-badge {
     background: #fff3cd;
     color: #ff9900;
     padding: 4px 8px;
@@ -170,8 +167,8 @@
 }
 
 /* Remove button */
-.scanner-unique-remove-btn {
-    color: var(--scanner-danger);
+.invscan-remove-btn {
+    color: var(--invscan-danger);
     background: none;
     border: none;
     font-size: 14px;
@@ -179,12 +176,12 @@
     transition: color 0.2s ease;
 }
 
-.scanner-unique-remove-btn:hover {
+.invscan-remove-btn:hover {
     text-decoration: underline;
 }
 
 /* Scanner box */
-.scanner-unique-box {
+.invscan-box {
     flex: 1;
     min-width: 250px;
     max-width: 400px;
@@ -193,29 +190,29 @@
     overflow: auto;
 }
 
-.scanner-unique-preview {
+.invscan-preview {
     width: 100%;
     height: 160px;
-    background: var(--scanner-hover-bg);
-    border: 1px solid var(--scanner-border-light);
+    background: var(--invscan-hover-bg);
+    border: 1px solid var(--invscan-border);
     border-radius: 4px;
     margin-bottom: 12px;
 }
 
 /* Buttons */
-.scanner-unique-scan-btn,
-.scanner-unique-save-btn {
+.invscan-scan-btn,
+.invscan-save-btn {
     font-size: 14px;
     font-weight: 600;
     border-radius: 6px;
     padding: 10px 20px;
-    transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
     cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
 }
 
-.scanner-unique-scan-btn {
-    background-color: var(--scanner-primary-light);
-    color: var(--scanner-primary);
+.invscan-scan-btn {
+    background: var(--invscan-primary-light);
+    color: var(--invscan-primary);
     border: none;
     display: flex;
     align-items: center;
@@ -223,71 +220,71 @@
     gap: 8px;
 }
 
-.scanner-unique-scan-btn:hover {
-    background-color: #d6c8ff;
-    color: var(--scanner-text-dark);
+.invscan-scan-btn:hover {
+    background: #d6c8ff;
+    color: var(--invscan-text-dark);
 }
 
-.scanner-unique-save-btn {
-    background-color: var(--scanner-primary);
-    color: var(--scanner-bg-light);
+.invscan-save-btn {
+    background: var(--invscan-primary);
+    color: var(--invscan-bg-light);
     border: none;
 }
 
-.scanner-unique-save-btn:hover {
-    background-color: #2610a6;
+.invscan-save-btn:hover {
+    background: #2610a6;
 }
 
-.scanner-unique-save-btn:disabled {
-    background-color: #999;
+.invscan-save-btn:disabled {
+    background: #999;
     cursor: not-allowed;
 }
 
-/* Status messages */
-.scanner-unique-status-tag {
+/* Status */
+.invscan-status {
     margin-top: 10px;
     font-size: 13px;
-    color: var(--scanner-accent);
+    color: var(--invscan-accent);
     background: #e8f5e9;
     padding: 6px 10px;
     border-radius: 4px;
     text-align: center;
 }
 
-/* Manual submit button */
-.scanner-unique-scan-btn.manual {
-    background-color: #e8f0fe;
+/* Manual */
+.invscan-manual-btn {
+    background: #e8f0fe;
     color: #1a73e8;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-    .scanner-unique-card {
+@media(max-width:768px) {
+    .invscan-card {
         height: auto;
         flex-direction: column;
     }
 
-    .scanner-unique-body {
+    .invscan-body {
         flex-direction: column;
         gap: 16px;
     }
 
-    .scanner-unique-box,
-    .scanner-unique-product-list {
+    .invscan-box,
+    .invscan-product-list {
         width: 100%;
         max-width: 100%;
     }
 
-    .scanner-unique-footer {
+    .invscan-footer {
         justify-content: center;
     }
 
-    .scanner-unique-header,
-    .scanner-unique-footer {
+    .invscan-header,
+    .invscan-footer {
         text-align: center;
     }
 
-    .scanner-unique-preview {
+    .invscan-preview {
         height: 140px;
     }
 

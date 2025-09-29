@@ -1,5 +1,5 @@
-/* Fullscreen blur backdrop */
-.scan-overlay {
+/* Fullscreen backdrop */
+.invact-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -8,15 +8,15 @@
     backdrop-filter: blur(6px);
     background-color: rgba(0, 0, 0, 0.4);
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     z-index: 1000;
 }
 
-/* Centered container */
-.scan-action-panel {
+/* Centered panel */
+.invact-panel {
     position: relative;
-    background: white;
+    background: #fff;
     width: 720px;
     height: auto;
     padding: 32px;
@@ -24,12 +24,11 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
 }
 
-/* Top right close icon */
-.top-close {
+/* Close button */
+.invact-close-btn {
     position: absolute;
     top: 16px;
     right: 16px;
@@ -40,23 +39,23 @@
     color: #333;
 }
 
-/* Heading centered */
-.scan-heading {
+/* Heading */
+.invact-heading {
     font-size: 24px;
     margin-bottom: 12px;
     text-align: center;
 }
 
-/* Label text centered */
-.scan-description {
+/* Description text */
+.invact-description {
     font-size: 16px;
     margin-bottom: 24px;
     color: #444;
     text-align: center;
 }
 
-/* Buttons row */
-.actions {
+/* Action buttons row */
+.invact-actions {
     display: flex;
     gap: 24px;
     width: 100%;
@@ -64,7 +63,9 @@
 }
 
 /* Base button style */
-.actions button {
+.invact-actions button,
+.invact-enter-btn,
+.invact-leave-btn {
     flex: 0 0 280px;
     padding: 24px 16px;
     border: none;
@@ -74,7 +75,6 @@
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    /* vertical layout */
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -83,36 +83,54 @@
     line-height: 1.4;
 }
 
-/* Icon styling */
-.actions .icon {
+/* Icon style */
+.invact-icon {
     font-size: 36px;
     margin-bottom: 10px;
 }
 
-/* Leave Button */
-.actions .leave {
-    background-color: #fdecea;
-    color: #c62828;
-}
-
-.actions .leave .icon {
-    color: #c62828;
-}
-
-.actions .leave:hover {
-    background-color: #f9d6d3;
-}
-
 /* Enter Button */
-.actions .enter {
+.invact-enter-btn {
     background-color: #e8eaf6;
     color: #283593;
 }
 
-.actions .enter .icon {
+.invact-enter-btn .invact-icon {
     color: #283593;
 }
 
-.actions .enter:hover {
+.invact-enter-btn:hover {
     background-color: #dedeff;
+}
+
+/* Leave Button */
+.invact-leave-btn {
+    background-color: #fdecea;
+    color: #c62828;
+}
+
+.invact-leave-btn .invact-icon {
+    color: #c62828;
+}
+
+.invact-leave-btn:hover {
+    background-color: #f9d6d3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .invact-panel {
+        width: 90%;
+        padding: 24px;
+    }
+
+    .invact-actions {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .invact-actions button {
+        flex: 1 1 auto;
+        width: 100%;
+    }
 }

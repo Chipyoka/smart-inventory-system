@@ -11,10 +11,7 @@ const Topbar = () => {
   const user = useUserStore((state) => state.user);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -31,37 +28,32 @@ const Topbar = () => {
     second: '2-digit',
   });
 
-  const toggleMenu = (type) => {
-    setMenuType((prev) => (prev === type ? null : type));
-  };
+  const toggleMenu = (type) => setMenuType((prev) => (prev === type ? null : type));
 
   return (
     <>
-      <header className="topbar">
-        <div className="topbar-left">
-          <img src={logo} alt="SIMS Logo" className="topbar-logo" />
+      <header className="tb-container">
+        <div className="tb-left">
+          <img src={logo} alt="SIMS Logo" className="tb-logo" />
         </div>
 
-        <div className="topbar-right">
-          <div className="topbar-datetime">
-            <div className="topbar-datetime-label">Time & Date</div>
-            <div className="topbar-datetime-value">
-              {formattedDate} | {formattedTime}
-            </div>
+        <div className="tb-right">
+          <div className="tb-datetime">
+            <div className="tb-datetime-label">Time & Date</div>
+            <div className="tb-datetime-value">{formattedDate} | {formattedTime}</div>
           </div>
 
-          <button className="topbar-button" onClick={() => toggleMenu('profile')}>
-            <FaUserCog className="icon" />
+          <button className="tb-button" onClick={() => toggleMenu('profile')}>
+            <FaUserCog className="tb-icon" />
             <span>{user?.username || 'Unknown User'}</span>
           </button>
 
-          <button className="topbar-button" onClick={() => toggleMenu('settings')}>
-            <FaCogs className="icon" title="System Settings" />
+          <button className="tb-button" onClick={() => toggleMenu('settings')}>
+            <FaCogs className="tb-icon" title="System Settings" />
           </button>
         </div>
       </header>
 
-      {/* Conditionally Render Side Menu */}
       <SideMenu type={menuType} onClose={() => setMenuType(null)} />
     </>
   );

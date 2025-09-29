@@ -29,24 +29,24 @@ const NotificationsCenter = () => {
   }, []);
 
   return (
-    <div className="notifications-center">
+    <div className="notif-center-unique">
       <h3>Notifications Center</h3>
       {loading ? (
-        <p className="status-message">Loading...</p>
+        <p className="notif-status-msg">Loading...</p>
       ) : notifications.length === 0 ? (
-        <p className="status-message">No alerts found.</p>
+        <p className="notif-status-msg">No alerts found.</p>
       ) : (
-        <div className="notifications-list">
-          <ul>
+        <div className="notif-list-wrapper">
+          <ul className="notif-list-ul">
             {notifications.map((note, idx) => (
-              <li key={idx} className={`notification ${note.type}`}>
-                <div className="note-header">
-                  <span className={`badge ${note.type}`}>
+              <li key={idx} className={`notif-item ${note.type}`}>
+                <div className="notif-header">
+                  <span className={`notif-badge ${note.type}`}>
                     {note.type.replace("_", " ").toUpperCase()}
                   </span>
                 </div>
-                <div className="message">{note.message}</div>
-                <div className="barcode">Barcode: {note.barcode}</div>
+                <div className="notif-msg">{note.message}</div>
+                <div className="notif-barcode">Barcode: {note.barcode}</div>
               </li>
             ))}
           </ul>

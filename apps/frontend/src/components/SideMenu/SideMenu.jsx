@@ -2,10 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import './SideMenu.css';
 import { FaUserCog, FaCogs } from 'react-icons/fa';
 
-const SideMenu = ({ type, onClose }) => {
+const SideMenuUnique = ({ type, onClose }) => {
   const menuRef = useRef();
 
-  // Close on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -33,11 +32,11 @@ const SideMenu = ({ type, onClose }) => {
     if (type === 'profile') {
       return (
         <>
-          <div className="side-menu-header">
+          <div className="sm-unique-header">
             <h3><FaUserCog /> Profile</h3>
-            <button className="close-btn" onClick={onClose}>&times;</button>
+            <button className="sm-unique-close-btn" onClick={onClose}>&times;</button>
           </div>
-          <div className="side-menu-content">
+          <div className="sm-unique-content">
             <button>View Profile</button>
             <button>Edit Profile</button>
             <button>Change Password</button>
@@ -50,11 +49,11 @@ const SideMenu = ({ type, onClose }) => {
     if (type === 'settings') {
       return (
         <>
-          <div className="side-menu-header">
+          <div className="sm-unique-header">
             <h3><FaCogs /> Settings</h3>
-            <button className="close-btn" onClick={onClose}>&times;</button>
+            <button className="sm-unique-close-btn" onClick={onClose}>&times;</button>
           </div>
-          <div className="side-menu-content">
+          <div className="sm-unique-content">
             <button>Preferences</button>
             <button>System Config</button>
             <button>Theme</button>
@@ -68,12 +67,12 @@ const SideMenu = ({ type, onClose }) => {
   };
 
   return (
-    <div className="side-menu-backdrop">
-      <div className="side-menu" ref={menuRef}>
+    <div className="sm-unique-backdrop">
+      <div className="sm-unique-menu" ref={menuRef}>
         {renderContent()}
       </div>
     </div>
   );
 };
 
-export default SideMenu;
+export default SideMenuUnique;

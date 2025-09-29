@@ -4,7 +4,7 @@ import './Sidebar.css';
 import { useUserStore } from '../../store/userStore';
 import { FaTachometerAlt, FaBoxes, FaChartBar, FaSignOutAlt } from 'react-icons/fa';
 
-const Sidebar = () => {
+const SidebarUnique = () => {
   const navigate = useNavigate();
   const logout = useUserStore((state) => state.logout);
 
@@ -14,41 +14,47 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-inner">
+    <aside className="sb-unique-sidebar">
+      <div className="sb-unique-inner">
         {/* Navigation Links */}
-        <nav className="sidebar-nav">
+        <nav className="sb-unique-nav">
           <NavLink
             to="/dashboard"
-            className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}
+            className={({ isActive }) =>
+              isActive ? 'sb-unique-link sb-unique-active' : 'sb-unique-link'
+            }
           >
-            <FaTachometerAlt className="sidebar-icon" />
+            <FaTachometerAlt className="sb-unique-icon" />
             <span>Dashboard</span>
           </NavLink>
           <NavLink
             to="/inventory"
-            className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}
+            className={({ isActive }) =>
+              isActive ? 'sb-unique-link sb-unique-active' : 'sb-unique-link'
+            }
           >
-            <FaBoxes className="sidebar-icon" />
+            <FaBoxes className="sb-unique-icon" />
             <span>Inventory</span>
           </NavLink>
           <NavLink
             to="/analytics"
-            className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}
+            className={({ isActive }) =>
+              isActive ? 'sb-unique-link sb-unique-active' : 'sb-unique-link'
+            }
           >
-            <FaChartBar className="sidebar-icon" />
+            <FaChartBar className="sb-unique-icon" />
             <span>Analytics</span>
           </NavLink>
         </nav>
 
-        {/* Logout at bottom */}
-        <div className="sidebar-footer">
+        {/* Footer */}
+        <div className="sb-unique-footer">
           <button
             type="button"
-            className="sidebar-logout-button"
+            className="sb-unique-logout-btn"
             onClick={handleLogout}
           >
-            <FaSignOutAlt className="sidebar-icon" />
+            <FaSignOutAlt className="sb-unique-icon" />
             <span>Logout</span>
           </button>
         </div>
@@ -57,4 +63,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SidebarUnique;

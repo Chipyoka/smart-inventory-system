@@ -7,7 +7,7 @@ import "./InventoryAnalyticsGrid.css";
 
 const InventoryAnalytics = () => {
   return (
-    <div className="grid-analytics">
+    <div className="ia-grid-unique">
       <InventoryValueByCategory />
       <ExpiryRiskDonut />
       <StockStatusByCategory threshold={20} />

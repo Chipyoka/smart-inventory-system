@@ -6,11 +6,11 @@ import './Layout.css';
 
 const Layout = () => {
   return (
-    <div className="layout-wrapper">
+    <div className="lyt-wrapper-unique">
       <Topbar />
-      <div className="layout-body">
+      <div className="lyt-body-unique">
         <Sidebar />
-        <main className="layout-content">
+        <main className="lyt-content-unique">
           <Outlet />
         </main>
       </div>

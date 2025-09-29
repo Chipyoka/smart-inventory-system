@@ -47,19 +47,19 @@ const AuditActivityTrend = () => {
   const data = useMemo(() => rawData, [rawData]);
 
   return (
-    <div className="aat-card analytics-card">
-      <div className="card-header">
-        <h3>Audit Activity (Last 30 Days)</h3>
-        <div className="card-sub">Daily insert/update/delete counts</div>
+    <div className="aat-unique-card">
+      <div className="aat-unique-header">
+        <h3 className="aat-unique-title">Audit Activity (Last 30 Days)</h3>
+        <div className="aat-unique-sub">Daily insert/update/delete counts</div>
       </div>
 
-      <div className="card-body">
+      <div className="aat-unique-body">
         {loading ? (
-          <div className="loader">Loading…</div> // Consider replacing with spinner
+          <div className="aat-unique-loader">Loading…</div>
         ) : error ? (
-          <div className="error">{error}</div> // Style for professional error box
+          <div className="aat-unique-error">{error}</div>
         ) : data.length === 0 ? (
-          <div className="empty">No activity available</div> // Optional illustration
+          <div className="aat-unique-empty">No activity available</div>
         ) : (
           <ResponsiveContainer width="100%" height={320}>
             <LineChart

@@ -29,9 +29,8 @@ const StockedProducts = () => {
     fetchStockedProducts();
   }, []);
 
-  // Sort handler toggling direction or changing key
   const onSort = (key) => {
-    setCurrentPage(1); // Reset to first page on sort
+    setCurrentPage(1);
     setSortConfig((prev) => {
       if (prev.key === key) {
         return {
@@ -43,10 +42,8 @@ const StockedProducts = () => {
     });
   };
 
-  // Filter + sort products memoized for performance
   const filteredSorted = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
-
     let filtered = products;
     if (term) {
       filtered = products.filter(
@@ -75,19 +72,16 @@ const StockedProducts = () => {
     return sorted;
   }, [products, searchTerm, sortConfig]);
 
-  // Pagination controls
   const totalPages = Math.ceil(filteredSorted.length / PAGE_SIZE);
   const pagedProducts = filteredSorted.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
-  // Render sort icon for column headers
   const renderSortIcon = (key) => {
     if (sortConfig.key !== key) return null;
     return sortConfig.direction === SORT_DIRECTIONS.ASC ? <FiChevronUp /> : <FiChevronDown />;
   };
 
-  // Pagination buttons
   const Pagination = () => (
-    <nav className="pagination" aria-label="Product table pagination">
+    <nav className="spu-pagination" aria-label="Product table pagination">
       <button
         onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
         disabled={currentPage === 1}
@@ -95,7 +89,7 @@ const StockedProducts = () => {
       >
         Prev
       </button>
-      <span aria-live="polite" aria-atomic="true" className="pagination-info">
+      <span aria-live="polite" aria-atomic="true" className="spu-pagination-info">
         Page {currentPage} of {totalPages || 1}
       </span>
       <button
@@ -109,36 +103,36 @@ const StockedProducts = () => {
   );
 
   return (
-    <section className="stocked-products-container" aria-label="Stocked Products Table">
-      <header className="stocked-products-header">
+    <section className="spu-container" aria-label="Stocked Products Table">
+      <header className="spu-header">
         <h2>All Stocked Products</h2>
-        <div className="stocked-products-controls">
-          <div className="search-wrapper">
-            <FiSearch className="search-icon" aria-hidden="true" />
-            <label htmlFor="product-search" className="visually-hidden">
+        <div className="spu-controls">
+          <div className="spu-search-wrapper">
+            <FiSearch className="spu-search-icon" aria-hidden="true" />
+            <label htmlFor="product-search" className="spu-visually-hidden">
               Search by name or barcode
             </label>
             <input
               id="product-search"
               type="search"
-              className="search-input"
+              className="spu-search-input"
               placeholder="Search by name or barcode..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
-                setCurrentPage(1); // Reset page on search
+                setCurrentPage(1);
               }}
-              aria-describedby="search-desc"
+              aria-describedby="spu-search-desc"
             />
-            <span id="search-desc" className="visually-hidden">
+            <span id="spu-search-desc" className="spu-visually-hidden">
               Type product name or barcode to filter the table
             </span>
           </div>
         </div>
       </header>
 
-      <div className="stocked-products-table">
-        <table role="table" aria-describedby="product-count" cellPadding="0" cellSpacing="0">
+      <div className="spu-table-container">
+        <table role="table" aria-describedby="spu-product-count" cellPadding="0" cellSpacing="0">
           <thead>
             <tr>
               {[
@@ -160,7 +154,7 @@ const StockedProducts = () => {
                   aria-sort={sortConfig.key === key ? sortConfig.direction : 'none'}
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && onSort(key)}
-                  className="sortable"
+                  className="spu-sortable"
                 >
                   {label} {renderSortIcon(key)}
                 </th>
@@ -171,32 +165,29 @@ const StockedProducts = () => {
             {pagedProducts.length ? (
               pagedProducts.map((item) => (
                 <tr key={item.product_id} title={item.name}>
-                  <td className="truncate" title={item.product_id}>{item.product_id}</td>
-                  <td className="truncate" title={item.name}>{item.name}</td>
-                  <td className="truncate" title={item.category_name || '-'}>{item.category_name || '-'}</td>
-                  <td
-                    className={item.stock < 10 ? 'low-stock' : ''}
-                    title={item.stock.toString()}
-                  >
+                  <td className="spu-truncate" title={item.product_id}>{item.product_id}</td>
+                  <td className="spu-truncate" title={item.name}>{item.name}</td>
+                  <td className="spu-truncate" title={item.category_name || '-'}>{item.category_name || '-'}</td>
+                  <td className={item.stock < 10 ? 'spu-low-stock' : ''} title={item.stock.toString()}>
                     {item.stock}
                   </td>
                   <td>K{Number(item.selling_price).toFixed(2)}</td>
-                  <td className="truncate" title={item.location || '-'}>{item.location || '-'}</td>
-                  <td className="truncate" title={item.supplier_name || '-'}>{item.supplier_name || '-'}</td>
+                  <td className="spu-truncate" title={item.location || '-'}>{item.location || '-'}</td>
+                  <td className="spu-truncate" title={item.supplier_name || '-'}>{item.supplier_name || '-'}</td>
                   <td>{item.expiry_date || '-'}</td>
-                  <td className="truncate" title={item.barcode || '-'}>{item.barcode || '-'}</td>
+                  <td className="spu-truncate" title={item.barcode || '-'}>{item.barcode || '-'}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="9" className="no-results">
+                <td colSpan="9" className="spu-no-results">
                   No products found.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
-        <div id="product-count" className="visually-hidden">
+        <div id="spu-product-count" className="spu-visually-hidden">
           {filteredSorted.length} products total
         </div>
       </div>

@@ -18,11 +18,9 @@ const MostInDemand = () => {
     const fetchMostInDemand = async () => {
       try {
         const res = await api.get("/items/most-in-demand");
-
         if (!Array.isArray(res.data)) {
           throw new Error("Invalid response format: expected array");
         }
-
         setItems(res.data);
       } catch (err) {
         console.error("MostInDemand fetch error:", err.response?.data || err.message);
@@ -32,35 +30,34 @@ const MostInDemand = () => {
         setLoading(false);
       }
     };
-
     fetchMostInDemand();
   }, []);
 
   return (
-    <div className="mid-products">
+    <div className="mid-products-unique">
       <h3>Most-in-Demand (MID) Products</h3>
 
       {loading && (
-        <p aria-live="polite" className="status-message">
+        <p aria-live="polite" className="mid-status-msg">
           Loading...
         </p>
       )}
 
       {error && (
-        <p role="alert" className="error status-message">
+        <p role="alert" className="mid-error mid-status-msg">
           {error}
         </p>
       )}
 
       {!loading && !error && items.length === 0 && (
-        <p aria-live="polite" className="status-message">
+        <p aria-live="polite" className="mid-status-msg">
           No in-demand products found.
         </p>
       )}
 
       {!loading && !error && items.length > 0 && (
-        <table>
-          <caption className="sr-only">Most-in-demand products table</caption>
+        <table className="mid-table">
+          <caption className="mid-sr-only">Most-in-demand products table</caption>
           <thead>
             <tr>
               <th scope="col">Item Name</th>

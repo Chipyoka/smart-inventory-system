@@ -37,19 +37,19 @@ const ExpiryRiskDonut = () => {
   }, []);
 
   return (
-    <div className="erd-card analytics-card">
-      <div className="card-header">
-        <h3>Expiry Risk (Items)</h3>
-        <div className="card-sub">Groups items by expiry horizon</div>
+    <div className="erd-unique-card">
+      <div className="erd-unique-header">
+        <h3 className="erd-unique-title">Expiry Risk (Items)</h3>
+        <div className="erd-unique-sub">Groups items by expiry horizon</div>
       </div>
 
-      <div className="card-body">
+      <div className="erd-unique-body">
         {loading ? (
-          <div className="loader">Loading…</div>
+          <div className="erd-unique-loader">Loading…</div>
         ) : err ? (
-          <div className="error">{err}</div>
+          <div className="erd-unique-error">{err}</div>
         ) : (
-          <div className="chart-wrapper">
+          <div className="erd-unique-chart-wrapper">
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -60,7 +60,9 @@ const ExpiryRiskDonut = () => {
                   outerRadius={100}
                   paddingAngle={4}
                   labelLine={false}
-                  label={({ percent }) => (percent > 0.03 ? `${(percent*100).toFixed(0)}%` : '')}
+                  label={({ percent }) =>
+                    percent > 0.03 ? `${(percent * 100).toFixed(0)}%` : ""
+                  }
                   isAnimationActive={true}
                 >
                   {data.map((entry, idx) => (
@@ -72,14 +74,21 @@ const ExpiryRiskDonut = () => {
                     />
                   ))}
                 </Pie>
-                <Tooltip 
-                  formatter={(value, name, props) => [`${value}`, `${props.payload.bucket}`]} 
+                <Tooltip
+                  formatter={(value, name, props) => [
+                    `${value}`,
+                    `${props.payload.bucket}`
+                  ]}
                   contentStyle={{ borderRadius: 8, fontSize: 12 }}
                 />
-                <Legend 
-                  verticalAlign="bottom" 
-                  height={36} 
-                  wrapperStyle={{ fontSize: 12, color: "#374151", marginTop: 8 }}
+                <Legend
+                  verticalAlign="bottom"
+                  height={36}
+                  wrapperStyle={{
+                    fontSize: 12,
+                    color: "#374151",
+                    marginTop: 8
+                  }}
                 />
               </PieChart>
             </ResponsiveContainer>

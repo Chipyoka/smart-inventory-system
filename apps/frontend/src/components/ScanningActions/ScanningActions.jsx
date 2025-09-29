@@ -1,37 +1,35 @@
 import React, { useState } from 'react';
 import { FaArrowCircleUp, FaArrowCircleDown } from 'react-icons/fa';
 import { IoCloseSharp } from 'react-icons/io5';
-import ScannerTable from '../ScannerTable/ScannerTable';
-import ScannerTable2 from '../ScannerTable/ScannerTable2';
+import ScannerTableUnique from '../ScannerTable/ScannerTable';
+import ScannerTable2Unique from '../ScannerTable/ScannerTable2';
 import './ScanningActions.css';
 
-const ScanningActions = ({ onClose }) => {
+const ScanningActionsUnique = ({ onClose }) => {
   const [mode, setMode] = useState('');
 
-  const handleBackToMenu = () => {
-    setMode(''); // Reset to selection menu
-  };
+  const backToMenu = () => setMode('');
 
   return (
-    <div className="scan-overlay">
-      <div className="scan-action-panel">
+    <div className="invact-overlay">
+      <div className="invact-panel">
         {/* Top Close Button */}
-        <button className="top-close" onClick={onClose}>
+        <button className="invact-close-btn" onClick={onClose}>
           <IoCloseSharp size={24} />
         </button>
 
         {/* Mode Selection Screen */}
         {!mode ? (
           <>
-            <h2 className="scan-heading">Item Scanning</h2>
-            <p className="scan-description">Please select the intended barcode scanning action</p>
-            <div className="actions">
-              <button className="enter" onClick={() => setMode('enter')}>
-                <FaArrowCircleDown className="icon" />
+            <h2 className="invact-heading">Item Scanning</h2>
+            <p className="invact-description">Select the intended barcode scanning action</p>
+            <div className="invact-actions">
+              <button className="invact-enter-btn" onClick={() => setMode('enter')}>
+                <FaArrowCircleDown className="invact-icon" />
                 <span>Item Entering Inventory</span>
               </button>
-              <button className="leave" onClick={() => setMode('leave')}>
-                <FaArrowCircleUp className="icon" />
+              <button className="invact-leave-btn" onClick={() => setMode('leave')}>
+                <FaArrowCircleUp className="invact-icon" />
                 <span>Item Leaving Inventory</span>
               </button>
             </div>
@@ -39,10 +37,10 @@ const ScanningActions = ({ onClose }) => {
         ) : (
           <>
             {mode === 'enter' && (
-              <ScannerTable mode={mode} onClose={handleBackToMenu} />
+              <ScannerTableUnique mode={mode} onClose={backToMenu} />
             )}
             {mode === 'leave' && (
-              <ScannerTable2 mode={mode} onClose={handleBackToMenu} />
+              <ScannerTable2Unique mode={mode} onClose={backToMenu} />
             )}
           </>
         )}
@@ -51,4 +49,4 @@ const ScanningActions = ({ onClose }) => {
   );
 };
 
-export default ScanningActions;
+export default ScanningActionsUnique;

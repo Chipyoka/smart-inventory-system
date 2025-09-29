@@ -1,4 +1,4 @@
-.side-menu-backdrop {
+.sm-unique-backdrop {
     position: fixed;
     top: 0;
     left: 0;
@@ -10,7 +10,7 @@
     z-index: 1200;
 }
 
-.side-menu {
+.sm-unique-menu {
     width: 300px;
     height: 100%;
     background: #ffffff;
@@ -18,10 +18,10 @@
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    animation: slideIn 0.3s ease forwards;
+    animation: sm-unique-slideIn 0.3s ease forwards;
 }
 
-@keyframes slideIn {
+@keyframes sm-unique-slideIn {
     from {
         transform: translateX(100%);
         opacity: 0;
@@ -33,14 +33,14 @@
     }
 }
 
-.side-menu-header {
+.sm-unique-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
 }
 
-.side-menu-header h3 {
+.sm-unique-header h3 {
     font-size: 18px;
     display: flex;
     align-items: center;
@@ -49,7 +49,7 @@
     color: #0f172a;
 }
 
-.side-menu-content button {
+.sm-unique-content button {
     display: block;
     width: 100%;
     margin: 0.5rem 0;
@@ -64,11 +64,11 @@
     text-align: left;
 }
 
-.side-menu-content button:hover {
+.sm-unique-content button:hover {
     background: #e2e8f0;
 }
 
-.close-btn {
+.sm-unique-close-btn {
     background: none;
     border: none;
     font-size: 24px;
@@ -78,7 +78,7 @@
 }
 
 @media (max-width: 640px) {
-    .side-menu {
+    .sm-unique-menu {
         width: 100%;
     }
 }

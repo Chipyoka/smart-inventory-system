@@ -1,5 +1,5 @@
 /* Card container */
-.ivbc-card {
+.ivbc-unique-card {
     background: #ffffff;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
@@ -10,27 +10,31 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.ivbc-card:hover {
+.ivbc-unique-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
 /* Header */
-.card-header h3 {
+.ivbc-unique-header {
+    margin-bottom: 0.5rem;
+}
+
+.ivbc-unique-title {
     font-size: 1.25rem;
     font-weight: 600;
     color: #111827;
     margin: 0;
 }
 
-.card-sub {
+.ivbc-unique-sub {
     font-size: 0.875rem;
     color: #6b7280;
     margin-top: 0.25rem;
 }
 
 /* Body */
-.card-body {
+.ivbc-unique-body {
     margin-top: 1rem;
     flex: 1;
     display: flex;
@@ -38,26 +42,31 @@
     justify-content: center;
 }
 
-.chart-wrapper {
+/* Chart wrapper */
+.ivbc-unique-chart-wrapper {
     width: 100%;
     height: 100%;
 }
 
 /* States */
-.loader,
-.error,
-.empty {
+.ivbc-unique-loader,
+.ivbc-unique-error,
+.ivbc-unique-empty {
     font-size: 0.95rem;
-    color: #6b7280;
     text-align: center;
 }
 
-.error {
-    color: #dc2626;
+.ivbc-unique-loader {
+    color: #2563eb;
     font-weight: 500;
 }
 
-.empty {
+.ivbc-unique-error {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.ivbc-unique-empty {
     color: #9ca3af;
     font-style: italic;
 }

@@ -1,5 +1,5 @@
-/* Shared wrapper with notifications width */
-.barcode-wrapper {
+/* Unique wrapper */
+.bb-unique-wrapper {
     max-width: 800px;
     margin: 0 auto;
     padding: auto;
@@ -7,14 +7,16 @@
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.barcode-button-container {
+/* Outer container */
+.bb-unique-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
 }
 
-.barcode-btn {
+/* Button style */
+.bb-unique-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,29 +24,32 @@
     padding: 20px 24px;
     background: #3412da;
     border: none;
-    border-radius: 8px;
-    color: white;
+    border-radius: 10px;
+    color: #ffffff;
     cursor: pointer;
     width: 100%;
-    max-width: 240px;
-    /* Optional limit inside center */
-    height: 140px;
+    max-width: 260px;
+    height: 150px;
     font-family: inherit;
-    box-shadow: 0 4px 8px rgba(52, 18, 218, 0.4);
-    transition: background-color 0.3s ease;
+    box-shadow: 0 5px 10px rgba(52, 18, 218, 0.35);
+    transition: background-color 0.25s ease, transform 0.2s ease;
 }
 
-.barcode-btn:hover {
+/* Hover effect */
+.bb-unique-btn:hover {
     background: #2a0fc2;
+    transform: translateY(-3px);
 }
 
-.barcode-label {
-    font-size: 0.875rem;
+/* Label inside button */
+.bb-unique-label {
+    font-size: 0.95rem;
     font-weight: 700;
     margin-bottom: 12px;
     text-align: center;
 }
 
-.barcode-icon {
-    font-size: 2.5rem;
+/* Icon size */
+.bb-unique-icon {
+    font-size: 2.6rem;
 }

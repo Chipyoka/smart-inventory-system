@@ -1,35 +1,33 @@
-.grid-analytics {
+.ia-grid-unique {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: 12px;
-    /* smaller gap */
     align-items: stretch;
     margin: 0 auto;
     max-width: 1200px;
-    /* limit total width */
 }
 
 /* Large cards: take half or full width */
-.grid-analytics>*:nth-child(1),
-.grid-analytics>*:nth-child(2) {
+.ia-grid-unique>*:nth-child(1),
+.ia-grid-unique>*:nth-child(2) {
     grid-column: span 6;
 }
 
-.grid-analytics>*:nth-child(3),
-.grid-analytics>*:nth-child(4) {
+.ia-grid-unique>*:nth-child(3),
+.ia-grid-unique>*:nth-child(4) {
     grid-column: span 12;
 }
 
 /* Medium screens */
 @media (max-width: 1200px) {
-    .grid-analytics>* {
+    .ia-grid-unique>* {
         grid-column: span 12;
     }
 }
 
 /* Small screens */
 @media (max-width: 768px) {
-    .grid-analytics {
+    .ia-grid-unique {
         gap: 8px;
     }
 }

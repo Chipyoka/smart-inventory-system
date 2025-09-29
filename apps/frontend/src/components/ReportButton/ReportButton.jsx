@@ -5,7 +5,7 @@ import axios from '../../api/axiosInstance';
 import { toast } from 'react-toastify';
 import './ReportButton.css';
 
-const ReportButton = () => {
+const ReportButtonUnique = () => {
   const { role } = useUserStore(state => state.user);
   const [loading, setLoading] = useState(false);
 
@@ -32,29 +32,29 @@ const ReportButton = () => {
       });
 
       handleDownload(response.data, 'Inventory_Report.pdf');
-      toast.success('✅ Report downloaded successfully!');
+      toast.success('Report downloaded successfully!');
     } catch (error) {
       console.error('Report generation failed:', error);
-      toast.error('❌ Failed to generate report.');
+      toast.error('Failed to generate report.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="report-button-container">
+    <div className="rb-unique-container">
       <button
-        className="report-btn"
+        className="rb-unique-btn"
         onClick={handleGenerateReport}
         disabled={loading}
         aria-label="Generate Inventory Report"
       >
         {loading ? (
-          <div className="report-icon spinner" />
+          <div className="rb-unique-spinner" />
         ) : (
           <>
-            <span className="report-label">Generate Report</span>
-            <FaFileAlt className="report-icon" />
+            <span className="rb-unique-label">Generate Report</span>
+            <FaFileAlt className="rb-unique-icon" />
           </>
         )}
       </button>
@@ -62,4 +62,4 @@ const ReportButton = () => {
   );
 };
 
-export default ReportButton;
+export default ReportButtonUnique;

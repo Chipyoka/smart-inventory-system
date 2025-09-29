@@ -1,128 +1,127 @@
-.stocked-products-container {
-    padding: 12px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+.spu-container {
+    padding: 14px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     overflow-x: auto;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.stocked-products-header {
+.spu-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
-.stocked-products-header h2 {
-    font-size: 1.15rem;
+.spu-header h2 {
+    font-size: 1.2rem;
     font-weight: 600;
-    color: #333;
+    color: #2c2c2c;
     margin: 0;
 }
 
-.stocked-products-controls {
+.spu-controls {
     display: flex;
     align-items: center;
 }
 
-.search-wrapper {
+.spu-search-wrapper {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
-.search-icon {
-    color: #888;
+.spu-search-icon {
+    color: #777;
     font-size: 1rem;
 }
 
-.search-input {
-    padding: 6px 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+.spu-search-input {
+    padding: 6px 12px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
     outline: none;
-    min-width: 180px;
-    font-size: 0.8rem;
+    min-width: 190px;
+    font-size: 0.85rem;
     transition: border-color 0.2s ease;
 }
 
-.search-input:focus {
-    border-color: #007bff;
+.spu-search-input:focus {
+    border-color: #0056b3;
 }
 
-.stocked-products-table table {
+.spu-table-container table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.8rem;
-    min-width: 800px;
+    font-size: 0.85rem;
+    min-width: 820px;
 }
 
-.stocked-products-table thead th {
+.spu-table-container thead th {
     position: sticky;
     top: 0;
-    background-color: #f9f9f9;
+    background-color: #fafafa;
     z-index: 2;
     cursor: pointer;
     user-select: none;
     padding: 8px 6px;
     text-align: left;
     border-bottom: 2px solid #ddd;
-    padding-right: 18px;
-    /* space for sort icons */
-    color: #444;
+    padding-right: 20px;
+    color: #333;
     transition: background-color 0.2s ease;
     white-space: nowrap;
 }
 
-.stocked-products-table thead th:hover,
-.stocked-products-table thead th:focus {
-    background-color: #e6f0ff;
+.spu-table-container thead th:hover,
+.spu-table-container thead th:focus {
+    background-color: #dbe7ff;
     outline: none;
 }
 
-.stocked-products-table tbody td {
+.spu-table-container tbody td {
     padding: 8px 6px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e8e8e8;
     text-align: left;
     vertical-align: middle;
-    max-width: 120px;
+    max-width: 130px;
 }
 
-.stocked-products-table tbody tr:hover {
-    background-color: #f2f8ff;
+.spu-table-container tbody tr:hover {
+    background-color: #edf4ff;
 }
 
-.sortable svg {
+.spu-sortable svg {
     vertical-align: middle;
-    margin-left: 3px;
-    color: #007bff;
+    margin-left: 4px;
+    color: #0056b3;
     font-size: 0.9rem;
 }
 
-.truncate {
-    max-width: 120px;
+.spu-truncate {
+    max-width: 130px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.low-stock {
-    color: #d9534f;
+.spu-low-stock {
+    color: #c53030;
     font-weight: 600;
-    background-color: #f9d6d5;
-    border-radius: 3px;
-    padding: 1px 4px;
+    background-color: #fde2e1;
+    border-radius: 4px;
+    padding: 2px 6px;
 }
 
-.no-results {
+.spu-no-results {
     text-align: center;
-    padding: 16px;
-    color: #999;
+    padding: 18px;
+    color: #777;
     font-size: 0.85rem;
 }
 
-.visually-hidden {
+.spu-visually-hidden {
     position: absolute !important;
     height: 1px;
     width: 1px;
@@ -131,37 +130,37 @@
     white-space: nowrap;
 }
 
-/* Pagination styles */
-.pagination {
-    margin-top: 12px;
+/* Pagination */
+.spu-pagination {
+    margin-top: 14px;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
-.pagination button {
-    background-color: #007bff;
+.spu-pagination button {
+    background-color: #0056b3;
     border: none;
     color: white;
-    padding: 4px 10px;
-    border-radius: 5px;
-    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
-.pagination button:disabled {
-    background-color: #cccccc;
+.spu-pagination button:disabled {
+    background-color: #bbbbbb;
     cursor: not-allowed;
 }
 
-.pagination button:hover:not(:disabled) {
-    background-color: #0056b3;
+.spu-pagination button:hover:not(:disabled) {
+    background-color: #003f7f;
 }
 
-.pagination-info {
-    font-size: 0.8rem;
-    color: #555;
+.spu-pagination-info {
+    font-size: 0.85rem;
+    color: #444;
     user-select: none;
 }

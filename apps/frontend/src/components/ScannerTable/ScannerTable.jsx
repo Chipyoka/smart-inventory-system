@@ -16,9 +16,7 @@ const ScannerTable = ({ onClose }) => {
   const startScan = async () => {
     setStatusMsg('Starting camera...');
     if (scanner) {
-      try {
-        await scanner.reset();
-      } catch {}
+      try { await scanner.reset(); } catch {}
       setScanner(null);
     }
 
@@ -27,7 +25,7 @@ const ScannerTable = ({ onClose }) => {
     setScanning(true);
     setStatusMsg('Scanning... Align barcode within the frame');
 
-    codeReader.decodeFromVideoDevice(null, 'video', async (result, err) => {
+    codeReader.decodeFromVideoDevice(null, 'scanner-unique-video', async (result, err) => {
       if (result) {
         const scannedCode = result.getText();
         if (!items.find(i => i.barcode === scannedCode)) {
@@ -112,11 +110,7 @@ const ScannerTable = ({ onClose }) => {
   };
 
   const handleInputChange = (index, field, value) => {
-    setItems(prev =>
-      prev.map((item, i) =>
-        i === index ? { ...item, [field]: value } : item
-      )
-    );
+    setItems(prev => prev.map((item, i) => i === index ? { ...item, [field]: value } : item));
   };
 
   const remove = product_id => {
@@ -156,15 +150,9 @@ const ScannerTable = ({ onClose }) => {
         expiry_date: item.expiry_date || null
       }));
 
-      await axios.post(
-        'http://localhost:5000/api/inventory/bulk-insert',
-        { items: payload },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
+      await axios.post('http://localhost:5000/api/inventory/bulk-insert', { items: payload }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
       alert('All items saved successfully!');
       onClose();
@@ -175,18 +163,18 @@ const ScannerTable = ({ onClose }) => {
   };
 
   return (
-    <div className="scanner-ui-wrapper">
-      <div className="scanner-card">
-        <button className="close-btn" onClick={onClose}>&times;</button>
+    <div className="scanner-unique-wrapper">
+      <div className="scanner-unique-card">
+        <button className="scanner-unique-close-btn" onClick={onClose}>&times;</button>
 
-        <div className="scanner-header">
+        <div className="scanner-unique-header">
           <h2>Inventory Scanner</h2>
           <p>Scan barcodes or enter them manually, then update item details before saving.</p>
         </div>
 
-        <div className="scanner-body">
-          <div className="product-list">
-            <p className="sub-label">Scanned Items:</p>
+        <div className="scanner-unique-body">
+          <div className="scanner-unique-product-list">
+            <p className="scanner-unique-sub-label">Scanned Items:</p>
             <table>
               <thead>
                 <tr>
@@ -207,7 +195,7 @@ const ScannerTable = ({ onClose }) => {
                   <tr><td colSpan={10} style={{ textAlign: 'center' }}>No items scanned.</td></tr>
                 ) : items.map((item, index) => (
                   <tr key={item.product_id ?? `temp-${index}`}>
-                    <td><span className="badge">{index + 1}</span></td>
+                    <td><span className="scanner-unique-badge">{index + 1}</span></td>
                     <td>{item.barcode}</td>
                     <td><input type="text" value={item.name} onChange={e => handleInputChange(index, 'name', e.target.value)} /></td>
                     <td><input type="number" min="0" step="0.01" value={item.selling_price} onChange={e => handleInputChange(index, 'selling_price', e.target.value)} /></td>
@@ -216,24 +204,20 @@ const ScannerTable = ({ onClose }) => {
                     <td><input type="date" value={item.expiry_date} onChange={e => handleInputChange(index, 'expiry_date', e.target.value)} /></td>
                     <td><input type="text" value={item.location} onChange={e => handleInputChange(index, 'location', e.target.value)} /></td>
                     <td><Barcode value={item.barcode} height={30} /></td>
-                    <td>
-                      <button className="remove-btn" onClick={() => remove(item.product_id)}>
-                        Remove
-                      </button>
-                    </td>
+                    <td><button className="scanner-unique-remove-btn" onClick={() => remove(item.product_id)}>Remove</button></td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          <div className="scanner-box">
-            <video id="video" className="scanner-preview" />
-            <button className="scan-btn" onClick={() => (scanning ? stopScan() : startScan())}>
+          <div className="scanner-unique-box">
+            <video id="scanner-unique-video" className="scanner-unique-preview" />
+            <button className="scanner-unique-scan-btn" onClick={() => (scanning ? stopScan() : startScan())}>
               <MdQrCodeScanner size={24} />
               {scanning ? 'Stop Scan' : 'Start Scan'}
             </button>
-            <p className="status-tag">{statusMsg}</p>
+            <p className="scanner-unique-status-tag">{statusMsg}</p>
 
             <div style={{ marginTop: '20px' }}>
               <label htmlFor="manual-barcode">Enter Barcode Manually:</label>
@@ -245,19 +229,18 @@ const ScannerTable = ({ onClose }) => {
                 placeholder="e.g., 6009711322467"
               />
               <button
-                className="scan-btn"
-                style={{ backgroundColor: '#e8f0fe', color: '#1a73e8' }}
+                className="scanner-unique-scan-btn manual"
                 onClick={handleManualBarcodeSubmit}
               >
                 Submit Barcode
               </button>
-              <p className="status-tag">{manualStatus}</p>
+              <p className="scanner-unique-status-tag">{manualStatus}</p>
             </div>
           </div>
         </div>
 
-        <div className="scanner-footer">
-          <button className="save-btn" onClick={save} disabled={items.length === 0}>
+        <div className="scanner-unique-footer">
+          <button className="scanner-unique-save-btn" onClick={save} disabled={items.length === 0}>
             Save Items
           </button>
         </div>

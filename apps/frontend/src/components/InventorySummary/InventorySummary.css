@@ -1,5 +1,5 @@
-/* Layout Wrapper */
-.inventory-summary-wrapper {
+/* Wrapper */
+.invSum-wrapper-uniq {
     max-width: 900px;
     margin: 0 auto;
     padding: auto;
@@ -10,7 +10,7 @@
 }
 
 /* Inner container */
-.inventory-summary-container {
+.invSum-container-uniq {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
@@ -18,7 +18,7 @@
 }
 
 /* Header */
-.inventory-summary-container h2 {
+.invSum-title-uniq {
     font-size: 0.95rem;
     font-weight: 600;
     margin-bottom: 12px;
@@ -29,14 +29,14 @@
 }
 
 /* Grid layout */
-.summary-cards {
+.invSum-cards-uniq {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 12px;
 }
 
 /* Card styling */
-.summary-card {
+.invSum-card-uniq {
     padding: 10px 12px;
     border-radius: 6px;
     text-align: center;
@@ -46,13 +46,13 @@
     cursor: default;
 }
 
-.summary-card:hover {
+.invSum-card-uniq:hover {
     transform: translateY(-1px);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 /* Count value */
-.summary-card strong {
+.invSum-card-uniq strong {
     display: block;
     font-size: 1.1rem;
     font-weight: 600;
@@ -63,7 +63,7 @@
 }
 
 /* Label text */
-.summary-card span {
+.invSum-card-uniq span {
     display: block;
     font-size: 0.675rem;
     font-weight: 500;
@@ -73,18 +73,18 @@
 }
 
 /* Color themes */
-.summary-card.total strong {
+.invSum-total-uniq strong {
     color: #222;
 }
 
-.summary-card.stocked strong {
+.invSum-stocked-uniq strong {
     color: #2e7d32;
 }
 
-.summary-card.expired strong {
+.invSum-expired-uniq strong {
     color: #ef6c00;
 }
 
-.summary-card.outofstock strong {
+.invSum-out-uniq strong {
     color: #c62828;
 }
