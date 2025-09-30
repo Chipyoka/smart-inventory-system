@@ -20,6 +20,7 @@ router.get('/scan/:barcode', verifyToken, inventoryController.scanBarcode);
 
 // Get Item Details by Barcode
 router.get('/by-barcode/:barcode', verifyToken, inventoryController.getItemByBarcode);
+router.post('/bulk-delete', verifyToken, inventoryController.bulkDeleteItems);
 
 // Stocked Products Listing
 router.get('/stocked-products', verifyToken, inventoryController.getStockedProducts);

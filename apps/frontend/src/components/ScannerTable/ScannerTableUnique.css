@@ -10,7 +10,9 @@
     --invscan-hover-bg: #f0f0f0;
 }
 
-/* Global resets */
+/* =========================
+   GLOBAL RESET
+========================= */
 .invscan-wrapper *,
 .invscan-wrapper *::before,
 .invscan-wrapper *::after {
@@ -18,22 +20,25 @@
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* Fullscreen wrapper */
+/* =========================
+   WRAPPER
+========================= */
 .invscan-wrapper {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100vw;
     height: 100vh;
+    padding: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 24px;
     background-color: rgba(0, 0, 0, 0.08);
     z-index: 1000;
 }
 
-/* Main card */
+/* =========================
+   CARD
+========================= */
 .invscan-card {
     width: auto;
     max-width: 100%;
@@ -48,7 +53,9 @@
     position: relative;
 }
 
-/* Header & footer */
+/* =========================
+   HEADER & FOOTER
+========================= */
 .invscan-header,
 .invscan-footer {
     background: #fafafa;
@@ -78,7 +85,9 @@
     color: var(--invscan-text-muted);
 }
 
-/* Close button */
+/* =========================
+   CLOSE BUTTON
+========================= */
 .invscan-close-btn {
     position: absolute;
     top: 12px;
@@ -96,7 +105,9 @@
     color: var(--invscan-danger);
 }
 
-/* Body */
+/* =========================
+   BODY
+========================= */
 .invscan-body {
     flex: 1;
     display: flex;
@@ -106,7 +117,9 @@
     overflow: auto;
 }
 
-/* Product list */
+/* =========================
+   PRODUCT LIST
+========================= */
 .invscan-product-list {
     flex: 4;
     min-width: 200px;
@@ -156,7 +169,9 @@
     box-shadow: 0 0 0 2px rgba(52, 18, 218, 0.15);
 }
 
-/* Badge */
+/* =========================
+   BADGE
+========================= */
 .invscan-badge {
     background: #fff3cd;
     color: #ff9900;
@@ -166,7 +181,9 @@
     font-size: 13px;
 }
 
-/* Remove button */
+/* =========================
+   REMOVE BUTTON
+========================= */
 .invscan-remove-btn {
     color: var(--invscan-danger);
     background: none;
@@ -180,7 +197,9 @@
     text-decoration: underline;
 }
 
-/* Scanner box */
+/* =========================
+   SCANNER BOX
+========================= */
 .invscan-box {
     flex: 1;
     min-width: 250px;
@@ -199,21 +218,25 @@
     margin-bottom: 12px;
 }
 
-/* Buttons */
+/* =========================
+   BUTTONS
+========================= */
 .invscan-scan-btn,
-.invscan-save-btn {
+.invscan-save-btn,
+.invscan-manual-btn {
     font-size: 14px;
     font-weight: 600;
     border-radius: 6px;
     padding: 10px 20px;
     cursor: pointer;
     transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+    border: none;
 }
 
+/* Scan button */
 .invscan-scan-btn {
     background: var(--invscan-primary-light);
     color: var(--invscan-primary);
-    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -225,10 +248,10 @@
     color: var(--invscan-text-dark);
 }
 
+/* Save button */
 .invscan-save-btn {
     background: var(--invscan-primary);
     color: var(--invscan-bg-light);
-    border: none;
 }
 
 .invscan-save-btn:hover {
@@ -240,7 +263,19 @@
     cursor: not-allowed;
 }
 
-/* Status */
+/* Manual entry button */
+.invscan-manual-btn {
+    background: #e8f0fe;
+    color: #1a73e8;
+}
+
+.invscan-manual-btn:hover {
+    background: #d2e3fc;
+}
+
+/* =========================
+   STATUS
+========================= */
 .invscan-status {
     margin-top: 10px;
     font-size: 13px;
@@ -251,13 +286,9 @@
     text-align: center;
 }
 
-/* Manual */
-.invscan-manual-btn {
-    background: #e8f0fe;
-    color: #1a73e8;
-}
-
-/* Responsive */
+/* =========================
+   RESPONSIVE
+========================= */
 @media(max-width:768px) {
     .invscan-card {
         height: auto;

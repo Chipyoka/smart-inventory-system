@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { BrowserMultiFormatReader } from '@zxing/browser';
 import axios from 'axios';
 import { MdQrCodeScanner } from 'react-icons/md';
-import Barcode from 'react-barcode';
 import './ScannerTableUnique.css';
 
 const ScannerTableUnique = ({ onClose }) => {
@@ -13,6 +12,22 @@ const ScannerTableUnique = ({ onClose }) => {
   const [manualBarcode, setManualBarcode] = useState('');
   const [manualStatus, setManualStatus] = useState('');
 
+  // 🔹 Helper: fetch item from DB by barcode
+  const fetchItemByBarcode = async (barcode) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.get(
+        `http://localhost:5000/api/inventory/by-barcode/${barcode}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return res.data;
+    } catch (err) {
+      console.error('Item fetch failed:', err);
+      return null;
+    }
+  };
+
+  // 🔹 Start scanning
   const startScan = async () => {
     setStatusMsg('Starting camera...');
     if (scanner) {
@@ -29,21 +44,14 @@ const ScannerTableUnique = ({ onClose }) => {
       if (result) {
         const scannedCode = result.getText();
         if (!items.find(i => i.barcode === scannedCode)) {
-          setStatusMsg(`Barcode found: ${scannedCode}. Fetching data...`);
-          try {
-            const res = await axios.get(`http://localhost:5000/api/inventory/by-barcode/${scannedCode}`);
-            const product = {
-              ...res.data,
-              quality: '',
-              quantity: 1,
-              expiry_date: '',
-              location: '',
-              selling_price: res.data.selling_price || 0
-            };
+          setStatusMsg(`Barcode found: ${scannedCode}. Fetching...`);
+          const product = await fetchItemByBarcode(scannedCode);
+
+          if (!product) {
+            setStatusMsg(`No item found for: ${scannedCode}`);
+          } else {
             setItems(prev => [...prev, product]);
-            setStatusMsg(`Product "${product.name}" added successfully.`);
-          } catch {
-            setStatusMsg(`No product found for: ${scannedCode}`);
+            setStatusMsg(`Product "${product.name}" added to deletion list.`);
           }
 
           await codeReader.reset();
@@ -51,10 +59,13 @@ const ScannerTableUnique = ({ onClose }) => {
           setStatusMsg('Scan paused. Click Scan to continue.');
         }
       }
-      if (err && err.name !== 'NotFoundException') console.error('Scanner error:', err);
+      if (err && err.name !== 'NotFoundException') {
+        console.error('Scanner error:', err);
+      }
     });
   };
 
+  // 🔹 Stop scanning
   const stopScan = async () => {
     if (scanner) {
       await scanner.reset();
@@ -64,16 +75,7 @@ const ScannerTableUnique = ({ onClose }) => {
     }
   };
 
-  const fetchExternal = async barcode => {
-    try {
-      const res = await axios.get(`http://localhost:5000/api/external-lookup/${barcode}`);
-      return { name: res.data.name };
-    } catch (err) {
-      console.error('External lookup failed:', err);
-      return { name: '' };
-    }
-  };
-
+  // 🔹 Manual barcode entry
   const handleManualSubmit = async () => {
     if (!manualBarcode.trim()) {
       setManualStatus('Please enter a valid barcode.');
@@ -87,85 +89,80 @@ const ScannerTableUnique = ({ onClose }) => {
     }
 
     setManualStatus(`Looking up ${barcode}...`);
-    const { name } = await fetchExternal(barcode);
+    const product = await fetchItemByBarcode(barcode);
 
-    const newItem = {
-      product_id: `manual-${Date.now()}`,
-      barcode,
-      name,
-      selling_price: '',
-      quality: '',
-      quantity: 1,
-      expiry_date: '',
-      location: '',
-      category_id: null,
-      supplier_id: null
-    };
+    if (!product) {
+      setManualStatus(`No item found for: ${barcode}`);
+      setManualBarcode('');
+      return;
+    }
 
-    setItems(prev => [...prev, newItem]);
-    setManualStatus(name ? `Found: "${name}"` : 'No match found. Enter details manually.');
+    setItems(prev => [...prev, product]);
+    setManualStatus(`Item "${product.name}" added to deletion list.`);
     setManualBarcode('');
   };
 
-  const handleChange = (index, field, value) => {
-    setItems(prev => prev.map((item, i) => i === index ? { ...item, [field]: value } : item));
+  // 🔹 Delete a single item
+  const deleteItem = async (product_id) => {
+    if (!window.confirm('Are you sure you want to delete this item?')) return;
+
+    const token = localStorage.getItem('token');
+    try {
+      await axios.post(
+        'http://localhost:5000/api/inventory/bulk-delete',
+        { product_ids: [product_id] },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setItems(prev => prev.filter(i => i.product_id !== product_id));
+      alert('Item deleted successfully.');
+    } catch (err) {
+      console.error('Delete error:', err);
+      alert('Failed to delete item. Check console.');
+    }
   };
 
-  const removeItem = product_id => setItems(items.filter(i => i.product_id !== product_id));
+  // 🔹 Bulk delete all items
+  const bulkDeleteAll = async () => {
+    if (items.length === 0) return;
+    if (!window.confirm('Are you sure you want to delete ALL items in the list?')) return;
 
-  const saveItems = async () => {
     const token = localStorage.getItem('token');
-    if (!token) { alert('Login required.'); return; }
-
     try {
-      for (const item of items) {
-        if (!item.quantity || isNaN(item.quantity) || item.quantity < 1) {
-          alert(`Invalid quantity for ${item.name || item.barcode}`); return;
-        }
-        if (!item.selling_price || isNaN(item.selling_price) || item.selling_price < 0) {
-          alert(`Invalid price for ${item.name || item.barcode}`); return;
-        }
-      }
+      const product_ids = items.map(i => i.product_id);
+      await axios.post(
+        'http://localhost:5000/api/inventory/bulk-delete',
+        { product_ids },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-      const payload = items.map(item => ({
-        product_id: item.product_id,
-        name: item.name,
-        barcode: item.barcode,
-        category_id: item.category_id || null,
-        supplier_id: item.supplier_id || null,
-        selling_price: parseFloat(item.selling_price),
-        quantity: parseInt(item.quantity),
-        quality: item.quality,
-        location: item.location,
-        batch_number: item.batch_number || '',
-        expiry_date: item.expiry_date || null
-      }));
-
-      await axios.post('http://localhost:5000/api/inventory/bulk-insert', { items: payload }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      alert('All items saved successfully!');
-      onClose();
+      setItems([]);
+      alert('All items deleted successfully.');
     } catch (err) {
-      console.error('Save error:', err);
-      alert('Failed to save items. Check console.');
+      console.error('Bulk delete error:', err);
+      alert('Failed to delete items. Check console.');
     }
   };
 
   return (
     <div className="invscan-wrapper">
       <div className="invscan-card">
-        <button className="invscan-close-btn" onClick={onClose}>&times;</button>
+        {/* Close button */}
+        <button className="invscan-close-btn" onClick={onClose}>
+          &times;
+        </button>
 
+        {/* Header */}
         <div className="invscan-header">
-          <h2>Inventory Scanner</h2>
-          <p>Scan or enter barcodes manually, then update item details.</p>
+          <h2>Inventory Scanner / Delete</h2>
+          <p>Scan or enter barcodes manually, then delete items.</p>
         </div>
 
+        {/* Body */}
         <div className="invscan-body">
+          {/* Items table */}
           <div className="invscan-product-list">
-            <p className="invscan-sub-label">Scanned Items:</p>
+            <p className="invscan-sub-label">Items Ready for Deletion:</p>
             <table>
               <thead>
                 <tr>
@@ -174,59 +171,83 @@ const ScannerTableUnique = ({ onClose }) => {
                   <th>Name</th>
                   <th>Price (K)</th>
                   <th>Quality</th>
-                  <th>Qty</th>
+                  <th>Stock</th>
                   <th>Expiry</th>
                   <th>Location</th>
-                  <th>Preview</th>
-                  <th>Remove</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {items.length === 0 ? (
-                  <tr><td colSpan={10} style={{ textAlign: 'center' }}>No items scanned.</td></tr>
-                ) : items.map((item, index) => (
-                  <tr key={item.product_id ?? `temp-${index}`}>
-                    <td><span className="invscan-badge">{index + 1}</span></td>
-                    <td>{item.barcode}</td>
-                    <td><input value={item.name} onChange={e => handleChange(index, 'name', e.target.value)} /></td>
-                    <td><input type="number" min="0" step="0.01" value={item.selling_price} onChange={e => handleChange(index, 'selling_price', e.target.value)} /></td>
-                    <td><input value={item.quality} onChange={e => handleChange(index, 'quality', e.target.value)} /></td>
-                    <td><input type="number" min="1" value={item.quantity} onChange={e => handleChange(index, 'quantity', e.target.value)} /></td>
-                    <td><input type="date" value={item.expiry_date} onChange={e => handleChange(index, 'expiry_date', e.target.value)} /></td>
-                    <td><input value={item.location} onChange={e => handleChange(index, 'location', e.target.value)} /></td>
-                    <td><Barcode value={item.barcode} height={30} /></td>
-                    <td><button className="invscan-remove-btn" onClick={() => removeItem(item.product_id)}>Remove</button></td>
+                  <tr>
+                    <td colSpan={9} style={{ textAlign: 'center' }}>
+                      No items added.
+                    </td>
                   </tr>
-                ))}
+                ) : (
+                  items.map((item, index) => (
+                    <tr key={item.product_id ?? `temp-${index}`}>
+                      <td><span className="invscan-badge">{index + 1}</span></td>
+                      <td>{item.barcode}</td>
+                      <td>{item.name}</td>
+                      <td>{item.selling_price}</td>
+                      <td>{item.quality}</td>
+                      <td>{item.stock}</td>
+                      <td>{item.expiry_date}</td>
+                      <td>{item.location}</td>
+                      <td>
+                        <button
+                          className="invscan-remove-btn"
+                          onClick={() => deleteItem(item.product_id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
+
+            {/* 🔹 Bulk delete button */}
+            {items.length > 0 && (
+              <button className="invscan-remove-btn bulk-delete-btn" onClick={bulkDeleteAll}>
+                Delete All
+              </button>
+            )}
           </div>
 
+          {/* Scanner & Manual entry */}
           <div className="invscan-box">
             <video id="invscan-video" className="invscan-preview" />
-            <button className="invscan-scan-btn" onClick={() => (scanning ? stopScan() : startScan())}>
+            <button
+              className="invscan-scan-btn"
+              onClick={() => (scanning ? stopScan() : startScan())}
+            >
               <MdQrCodeScanner size={24} />
               {scanning ? 'Stop Scan' : 'Start Scan'}
             </button>
             <p className="invscan-status">{statusMsg}</p>
 
+            {/* Manual entry */}
             <div className="invscan-manual-entry">
               <label htmlFor="invscan-manual-barcode">Enter Barcode Manually:</label>
               <input
                 type="text"
                 id="invscan-manual-barcode"
                 value={manualBarcode}
-                onChange={e => setManualBarcode(e.target.value)}
+                onChange={(e) => setManualBarcode(e.target.value)}
                 placeholder="e.g., 6009711322467"
               />
-              <button className="invscan-scan-btn invscan-manual-btn" onClick={handleManualSubmit}>Submit Barcode</button>
+              <button
+                className="invscan-scan-btn invscan-manual-btn"
+                onClick={handleManualSubmit}
+              >
+                Submit Barcode
+              </button>
               <p className="invscan-status">{manualStatus}</p>
             </div>
           </div>
-        </div>
-
-        <div className="invscan-footer">
-          <button className="invscan-save-btn" onClick={saveItems} disabled={items.length === 0}>Save Items</button>
         </div>
       </div>
     </div>

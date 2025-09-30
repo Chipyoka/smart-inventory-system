@@ -214,22 +214,40 @@ exports.bulkInsertItems = async (req, res) => {
 // POST /bulk-delete
 // ------------------------
 exports.bulkDeleteItems = async (req, res) => {
-  const { product_ids } = req.body;
+  const { product_ids, barcodes } = req.body; // accept either product_ids or barcodes
   const userId = req.user.id;
 
-  if (!Array.isArray(product_ids) || !product_ids.length)
-    return res.status(400).json({ message: 'No product IDs provided for deletion' });
+  if ((!Array.isArray(product_ids) || !product_ids.length) && (!Array.isArray(barcodes) || !barcodes.length)) {
+    return res.status(400).json({ message: 'No product IDs or barcodes provided for deletion' });
+  }
 
   try {
-    const placeholders = product_ids.map(() => '?').join(',');
-    const sqlSelectItems = `SELECT * FROM items WHERE product_id IN (${placeholders})`;
-    const [itemsToDelete] = await db.query(sqlSelectItems, product_ids);
+    let itemsToDelete = [];
 
-    if (!itemsToDelete.length) return res.status(404).json({ message: 'No matching items found to delete' });
+    if (Array.isArray(product_ids) && product_ids.length) {
+      const placeholders = product_ids.map(() => '?').join(',');
+      const sqlSelect = `SELECT * FROM items WHERE product_id IN (${placeholders})`;
+      const [rows] = await db.query(sqlSelect, product_ids);
+      itemsToDelete = rows;
+    }
 
-    const sqlDelete = `DELETE FROM items WHERE product_id IN (${placeholders})`;
-    await db.query(sqlDelete, product_ids);
+    if (Array.isArray(barcodes) && barcodes.length) {
+      const placeholders = barcodes.map(() => '?').join(',');
+      const sqlSelect = `SELECT * FROM items WHERE barcode IN (${placeholders})`;
+      const [rows] = await db.query(sqlSelect, barcodes);
+      itemsToDelete = [...itemsToDelete, ...rows.filter(r => !itemsToDelete.find(i => i.product_id === r.product_id))];
+    }
 
+    if (!itemsToDelete.length) {
+      return res.status(404).json({ message: 'No matching items found to delete' });
+    }
+
+    // Delete items from database
+    const deletePlaceholders = itemsToDelete.map(() => '?').join(',');
+    const deleteSql = `DELETE FROM items WHERE product_id IN (${deletePlaceholders})`;
+    await db.query(deleteSql, itemsToDelete.map(i => i.product_id));
+
+    // Insert into audit logs
     const now = new Date();
     const auditLogs = itemsToDelete.map(item => [
       userId,
@@ -243,13 +261,15 @@ exports.bulkDeleteItems = async (req, res) => {
     ]);
     await insertAuditLogs(auditLogs);
 
-    res.status(200).json({ 
-      message: `Deleted ${itemsToDelete.length} item(s) successfully`, 
-      deleted: itemsToDelete.length, 
-      audited: auditLogs.length 
+    res.status(200).json({
+      message: `Deleted ${itemsToDelete.length} item(s) successfully`,
+      deleted: itemsToDelete.length,
+      audited: auditLogs.length,
+      items: itemsToDelete
     });
+
   } catch (error) {
     console.error('bulkDeleteItems error:', error);
-    res.status(500).json({ message: 'Failed to delete items' });
+    res.status(500).json({ message: 'Failed to delete items', error: error.message });
   }
 };
